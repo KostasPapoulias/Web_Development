@@ -1,0 +1,25 @@
+body{
+    background-color: rgb(124, 155, 166);
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.buttons{
+    height: 70px;
+    width: 200px;
+    border-radius: 10px;
+    background-color: lightseagreen;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 35px;
+}
+
+.buttons:hover{
+    background-color: rgb(94, 125, 78);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}

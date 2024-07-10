@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>ChatGPT</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/ChatGPT.css">
+    </head>
+    <body>
+
+        <div>
+            <button class="buttons" id="takecarecat">How to take care of a cat</button>
+            <button class="buttons" id="takecaredog">How to take care of a dog</button>
+
+        </div>
+
+        <form id="form">
+            <label for="ask">Ask your own: </label>
+            <input type="text" name="ask" id="askid">
+
+            <button id="askButton" type="button" >Ask</button>
+        </form>
+
+        <div id="context"></div>
+
+        <script src="js/ChatGPT.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    </body>
+</html>

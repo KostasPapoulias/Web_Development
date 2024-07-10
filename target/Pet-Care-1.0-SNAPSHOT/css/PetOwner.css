@@ -1,0 +1,17 @@
+body{
+    background-color: rgb(124, 155, 166);
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+
+#th, td{
+    background-color: bisque;
+    padding: 20px;
+    border: 2px solid black;
+}

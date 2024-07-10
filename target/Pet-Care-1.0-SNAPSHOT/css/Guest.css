@@ -1,0 +1,66 @@
+body{
+    background-color: rgb(124, 155, 166);
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+
+#petkeepersDiv{
+
+    height: 50%;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-family: Arial, sans-serif;
+
+}
+
+.text{
+    text-align: left;
+
+}
+
+#th, td{
+    background-color: bisque;
+    padding: 20px;
+    border: 2px solid black;
+}
+
+h1{
+    margin-left: 150px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+a{
+    margin: 20px;
+    color: lightskyblue;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 30px;
+}
+
+#linkDiv{
+
+    border-radius: 5px;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 150px;
+    font-family: Arial, sans-serif;
+    background-color:cornsilk;
+}
+
+a:hover{
+    color: rgb(94, 125, 78);
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}

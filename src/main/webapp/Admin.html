@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Admin</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="css/Admin.css">
+    </head>
+    <body>
+
+        <div class="navbar">
+            <div class="dropdown">
+                <button class="dropbtn">Remove user
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" id="petKeepers">PetKeepers</a>
+                    <a href="#" id='petOwners'>PetOwners</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="dropbtn">Statistics
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="#" id="profit">Total Profit</a>
+                    <a href="#" id="pets">Total Pets</a>
+                    <a href="#" id='users'>Total Users</a>
+                </div>
+            </div>
+        </div>
+
+        <div id='context'></div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="js/Admin.js"></script>
+    </body>
+</html>
