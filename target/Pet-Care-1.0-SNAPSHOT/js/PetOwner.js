@@ -47,7 +47,28 @@ function createTableFromJSON(data) {
 //     });
 // });
 
+function displayPetKeepers(petKeepers) {
+    var petKeepersList = $('#booking');
+    petKeepersList.empty();
 
+    if (petKeepers && petKeepers.length > 0) {
+        // Loop through each pet keeper and display their details
+        petKeepers.forEach(function (petKeeper) {
+            var petKeeperElement = $('<p>Username: ' + petKeeper.username + ', First Name: ' + petKeeper.firstname + ', Last Name: ' + petKeeper.lastname + '</p>');
+            var bookButton = $('<button style="display: none;">Book</button>');
+            petKeeperElement.append(bookButton);
+            petKeeperElement.click(function() {
+                // Hide all other buttons
+                $('button', petKeepersList).hide();
+                // Toggle the visibility of this pet keeper's button
+                bookButton.toggle();
+            });
+            petKeepersList.append(petKeeperElement);
+        });
+    } else {
+        petKeepersList.append('<p>No pet keepers found.</p>');
+    }
+}
 
 
 function getAllKeepers() {
@@ -67,31 +88,31 @@ function getAllKeepers() {
 }
 
 // Function to display pet keepers
-function displayPetKeepers(petKeepers) {
-    var petKeepersList = $('#context');
-    petKeepersList.empty();
-
-    if (petKeepers && petKeepers.length > 0) {
-
-        let tableHTML = `<table id="table">
-                        <tr class="text">
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                        </tr>`;
-
-
-        // Loop through each pet keeper and display their details
-        petKeepers.forEach(function (petKeeper) {
-            tableHTML += '<tr class="text">' +
-                    '<td> ' + petKeeper.firstname + '</td>' +
-                    '<td> ' + petKeeper.lastname + '</td>' +
-                    '</tr>';
-        });
-
-        tableHTML += ('</table>');
-        petKeepersList.append(tableHTML);
-    } else {
-        petKeepersList.append('<p>No pet keepers found.</p>');
-    }
-}
+// function displayPetKeepers(petKeepers) {
+//     var petKeepersList = $('#context');
+//     petKeepersList.empty();
+//
+//     if (petKeepers && petKeepers.length > 0) {
+//
+//         let tableHTML = `<table id="table">
+//                         <tr class="text">
+//                             <th>First Name</th>
+//                             <th>Last Name</th>
+//                         </tr>`;
+//
+//
+//         // Loop through each pet keeper and display their details
+//         petKeepers.forEach(function (petKeeper) {
+//             tableHTML += '<tr class="text">' +
+//                     '<td> ' + petKeeper.firstname + '</td>' +
+//                     '<td> ' + petKeeper.lastname + '</td>' +
+//                     '</tr>';
+//         });
+//
+//         tableHTML += ('</table>');
+//         petKeepersList.append(tableHTML);
+//     } else {
+//         petKeepersList.append('<p>No pet keepers found.</p>');
+//     }
+// }
 
