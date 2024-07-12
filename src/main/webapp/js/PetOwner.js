@@ -91,32 +91,44 @@ function getAllKeepers() {
     });
 }
 
-// Function to display pet keepers
-// function displayPetKeepers(petKeepers) {
-//     var petKeepersList = $('#context');
-//     petKeepersList.empty();
-//
-//     if (petKeepers && petKeepers.length > 0) {
-//
-//         let tableHTML = `<table id="table">
-//                         <tr class="text">
-//                             <th>First Name</th>
-//                             <th>Last Name</th>
-//                         </tr>`;
-//
-//
-//         // Loop through each pet keeper and display their details
-//         petKeepers.forEach(function (petKeeper) {
-//             tableHTML += '<tr class="text">' +
-//                     '<td> ' + petKeeper.firstname + '</td>' +
-//                     '<td> ' + petKeeper.lastname + '</td>' +
-//                     '</tr>';
-//         });
-//
-//         tableHTML += ('</table>');
-//         petKeepersList.append(tableHTML);
-//     } else {
-//         petKeepersList.append('<p>No pet keepers found.</p>');
-//     }
-// }
+function PostPet() {
+    const formData = document.getElementById('form');
+
+
+    const xhr = new XMLHttpRequest();
+
+    // Event handler for the response
+    xhr.onload = function () {
+        const ajaxContent = $('#newPet');
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                const responseData = JSON.parse(xhr.responseText);
+                ajaxContent.html("Successful Pet Registration. <br> Your Data");
+                ajaxContent.append(createTableFromJSON(responseData));
+            } else {
+                ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
+                try {
+                    const responseData = JSON.parse(xhr.responseText);
+                    for (const key in responseData) {
+                        if (responseData.hasOwnProperty(key)) {
+                            ajaxContent.append(`<p style='color:red'>${key} = ${responseData[key]}</p>`);
+                        }
+                    }
+                } catch (e) {
+                    ajaxContent.append(`<p style='color:red'>Error parsing response: ${xhr.responseText}</p>`);
+                }
+            }
+        }
+    };
+
+    // Prepare data for sending
+    const data = {};
+    formData.forEach((value, key) => (data[key] = value));
+
+
+    // Set up and send the request
+    xhr.open('POST', 'CreatePet?');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(data));
+}
 
