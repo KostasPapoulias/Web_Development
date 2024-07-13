@@ -17,9 +17,7 @@ and open the template in the editor.
         <div id="booking"></div>
         <div id="message"></div>
         <h2>Update Pet Owner Info</h2>
-        <form id="changeInfo" action="ChangeUserInfo" method="POST">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
+        <form id="changeInfo" name="changeInfo" onsubmit="event.preventDefault(); ChangeUserInfo();">
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password"><br>
             <label for="firstname">First Name:</label><br>
@@ -32,11 +30,9 @@ and open the template in the editor.
         </form>
         <div id="feedback"></div>
         <div id="newPet">
-            <form id="form" name="form" onsubmit="event.preventDefault(); PostPet();">
+            <form id="petForm" name="petForm" onsubmit="event.preventDefault(); PostPet();">
                 <label for="name">Pet Name:</label><br>
                 <input type="text" id="name" name="name"><br>
-                <label for="owner_id">Owner ID:</label><br>
-                <input type="text" id="owner_id" name="owner_id"><br>
                 <label for="type">Pet Type:</label><br>
                 <input type="text" id="type" name="type"><br>
                 <label for="breed">Pet Breed:</label><br>

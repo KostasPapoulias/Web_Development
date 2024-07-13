@@ -44,6 +44,10 @@
         <servlet-name>CreatePet</servlet-name>
         <servlet-class>servlet.CreatePet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChangePetOwnerInfo</servlet-name>
+        <servlet-class>servlet.ChangePetOwnerInfo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -83,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>CreatePet</servlet-name>
         <url-pattern>/CreatePet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeUserInfo</servlet-name>
+        <url-pattern>/ChangePetOwnerInfo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

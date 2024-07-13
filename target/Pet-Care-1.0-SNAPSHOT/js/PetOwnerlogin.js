@@ -40,11 +40,11 @@ document.getElementById('loginButton').addEventListener('click', function () {
 
 
 function getOwner() {
-
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            window.location.href = 'PetOwner.html';
+            var username = document.getElementById('username').value;
+            window.location.href = 'PetOwner.html?username=' + encodeURIComponent(username);
         } else if (xhr.status !== 200) {
             $("#ajaxContent").html("User not exists or incorrect password");
         }

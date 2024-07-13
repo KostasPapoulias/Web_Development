@@ -8,10 +8,8 @@ package DB_tables;
 import DB_Connection.Connect;
 import com.google.gson.Gson;
 import mainClasses.PetOwner;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,16 +30,16 @@ public class EditPetOwnersTable {
 
         String updateQuery = "UPDATE petowners SET ";
 
-        if (!password.isEmpty()) {
+        if (password != null && !password.isEmpty()) {
             updateQuery += "password='" + password + "',";
         }
-        if (!firstname.isEmpty()) {
+        if (firstname != null && !firstname.isEmpty()) {
             updateQuery += "firstname='" + firstname + "',";
         }
-        if (!lastname.isEmpty()) {
+        if (lastname != null && !lastname.isEmpty()) {
             updateQuery += "lastname='" + lastname + "',";
         }
-        if (!telephone.isEmpty()) {
+        if (telephone != null && !telephone.isEmpty()) {
             updateQuery += "telephone='" + telephone + "',";
         }
 
@@ -51,6 +49,7 @@ public class EditPetOwnersTable {
         }
 
         updateQuery += " WHERE username = '" + username + "'";
+        System.out.println("UPDATE QUERY: " + updateQuery);
 
         try {
             stmt.executeUpdate(updateQuery);
@@ -59,6 +58,7 @@ public class EditPetOwnersTable {
             System.err.println(e.getMessage());
         }
     }
+
 
     public PetOwner jsonToPetOwner(String json) {
         Gson gson = new Gson();

@@ -14,20 +14,19 @@ import java.sql.SQLException;
 
 public class ChangeUserInfo extends HttpServlet {
 
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String firstname = request.getParameter("firstname");
-        String lastname = request.getParameter("lastname");
-        String phone = request.getParameter("phone");
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+        }
+        String data = buffer.toString();
 
-        PetOwner updatedPetOwner = new PetOwner();
-        updatedPetOwner.setUsername(username);
-        updatedPetOwner.setPassword(password);
-        updatedPetOwner.setFirstname(firstname);
-        updatedPetOwner.setLastname(lastname);
-        updatedPetOwner.setTelephone(phone);
+        Gson gson = new Gson();
+        PetOwner updatedPetOwner = gson.fromJson(data, PetOwner.class);
 
         EditPetOwnersTable eut = new EditPetOwnersTable();
 

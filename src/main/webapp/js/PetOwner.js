@@ -90,11 +90,46 @@ function getAllKeepers() {
         }
     });
 }
+let params = new URLSearchParams(window.location.search);
+const GlobalUsername = params.get('username');
+console.log("username :" + GlobalUsername);
+
+function ChangeUserInfo() {
+    const formElement = document.getElementById('changeInfo');
+
+    const xhr = new XMLHttpRequest();
+
+    // Event handler for the response
+    xhr.onload = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                if (xhr.getResponseHeader('Content-Type') === 'application/json') {
+                    const responseData = JSON.parse(xhr.responseText);
+                    console.log('Response:', responseData); // Log the response
+                } else {
+                    console.log('Unexpected response:', xhr.responseText);
+                }
+            } else {
+                console.log('Request failed. Returned status of ' + xhr.status);
+            }
+        }
+    };
+
+    // Prepare data for sending
+    const formData = new FormData(formElement);
+    const data = {};
+    formData.forEach((value, key) => (data[key] = value));
+    data.username = GlobalUsername;
+    console.log(data);
+    // Set up and send the request
+    xhr.open('POST', 'ChangeUserInfo?');
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(JSON.stringify(data));
+}
 
 function PostPet() {
-    const formElement = document.getElementById('form');
+    const formElement = document.getElementById('petForm');
 
-    console.log("HERE")
     const xhr = new XMLHttpRequest();
 
     // Event handler for the response
@@ -132,9 +167,8 @@ function PostPet() {
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
 }
-let params = new URLSearchParams(window.location.search);
-let username = params.get('username');
-console.log("username :" + username);
+
+
 function getOwnerId(username) {
     $.ajax({
         url: 'CreatePet', // Replace with your server endpoint
