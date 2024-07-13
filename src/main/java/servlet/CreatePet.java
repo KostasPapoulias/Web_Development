@@ -11,29 +11,35 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 public class CreatePet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
 
-        Pet newPet;
-
-        StringBuilder sb = new StringBuilder();
-        try ( BufferedReader reader = request.getReader()) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
+        EditPetsTable editPetsTable = new EditPetsTable();
+        try {
+            editPetsTable.createPetsTable();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
 
-        String jsonString = sb.toString();
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+        }
+        String data = buffer.toString();
 
         Gson gson = new Gson();
+        Pet newPet = gson.fromJson(data, Pet.class);
+
+
 
         try ( PrintWriter out = response.getWriter()) {
-            newPet = gson.fromJson(jsonString, Pet.class);
+            //newPet = gson.fromJson(jsonString, Pet.class);
 
             EditPetsTable eut = new EditPetsTable();
 
