@@ -7,6 +7,9 @@ package mainClasses;
 public class Pet {
     int pet_id, owner_id;
     String type, breed, gender, name;
+    int birthyear;
+    double weight;
+    String description, photo;
 
     public String getName() {
         return name;
@@ -15,9 +18,6 @@ public class Pet {
     public void setName(String name) {
         this.name = name;
     }
-    int birthyear;
-    double weight;
-    String description, photo;
 
     public int getPet_id() {
         return pet_id;
