@@ -92,9 +92,9 @@ function getAllKeepers() {
 }
 
 function PostPet() {
-    const formData = document.getElementById('form');
+    const formElement = document.getElementById('form');
 
-
+    console.log("HERE")
     const xhr = new XMLHttpRequest();
 
     // Event handler for the response
@@ -122,13 +122,34 @@ function PostPet() {
     };
 
     // Prepare data for sending
+    const formData = new FormData(formElement);
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
-
-
+    data.pet_id = String(data.owner_id) + String(data.birthyear);
+    console.log(data);
     // Set up and send the request
     xhr.open('POST', 'CreatePet?');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
+}
+let params = new URLSearchParams(window.location.search);
+let username = params.get('username');
+console.log("username :" + username);
+function getOwnerId(username) {
+    $.ajax({
+        url: 'CreatePet', // Replace with your server endpoint
+        type: 'GET',
+        data: {
+            username: username
+        },
+        success: function(response) {
+            // Handle the response from the server
+            console.log('Owner ID:', response.ownerId);
+        },
+        error: function(error) {
+            // Handle any errors
+            console.error('Error:', error);
+        }
+    });
 }
 
