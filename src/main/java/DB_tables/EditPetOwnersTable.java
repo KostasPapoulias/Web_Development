@@ -100,6 +100,35 @@ public class EditPetOwnersTable {
         return null;
     }
 
+    public int getOwnerIdByUsername(String username) throws SQLException, ClassNotFoundException {
+        Connection con = Connect.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            String query = "SELECT owner_id FROM petowners WHERE username = ?";
+            pstmt = con.prepareStatement(query);
+            pstmt.setString(1, username);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("owner_id");
+            } else {
+                throw new IllegalArgumentException("No user found with the provided username");
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
+
     public String databasePetOwnerToJSON(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = Connect.getConnection();
         Statement stmt = con.createStatement();

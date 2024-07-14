@@ -43,6 +43,30 @@ public class ChangeUserInfo extends HttpServlet {
     }
 
     @Override
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+
+        if (username == null || username.isEmpty()) {
+            response.setStatus(400);
+            response.getWriter().println("{ \"status\": \"error\", \"message\": \"Username is required.\" }");
+            return;
+        }
+
+        EditPetOwnersTable eut = new EditPetOwnersTable();
+        try {
+            int ownerId = eut.getOwnerIdByUsername(username);
+            response.setStatus(200);
+            response.getWriter().println("{ \"status\": \"success\", \"ownerId\": " + ownerId + " }");
+        } catch (SQLException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+            System.out.println(ex.getMessage());
+            response.setStatus(500);
+            response.getWriter().println("{ \"status\": \"error\", \"message\": \"Internal Server Error: " + ex.getMessage() + "\" }");
+        }
+    }
+
+    @Override
     public String getServletInfo() {
         return "UpdatePetOwner servlet";
     }

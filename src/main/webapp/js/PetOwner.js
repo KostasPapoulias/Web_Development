@@ -160,30 +160,52 @@ function PostPet() {
     const formData = new FormData(formElement);
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
-    data.pet_id = String(data.owner_id) + String(data.birthyear);
-    console.log(data);
-    // Set up and send the request
-    xhr.open('POST', 'CreatePet?');
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.send(JSON.stringify(data));
-}
 
-
-function getOwnerId(username) {
-    $.ajax({
-        url: 'CreatePet', // Replace with your server endpoint
-        type: 'GET',
-        data: {
-            username: username
-        },
-        success: function(response) {
-            // Handle the response from the server
-            console.log('Owner ID:', response.ownerId);
-        },
-        error: function(error) {
-            // Handle any errors
-            console.error('Error:', error);
-        }
+    getOwnerId(GlobalUsername).then(ownerId => {
+        console.log('Owner ID:', ownerId);
+        // Use ownerId here
+        data.pet_id = String(ownerId) + String(data.birthyear);
+        data.owner_id = ownerId;
+        console.log(data);
+        // Set up and send the request
+        xhr.open('POST', 'CreatePet?');
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.send(JSON.stringify(data));
+    }).catch(error => {
+        console.error('Error:', error);
     });
 }
 
+///// TO DO
+
+
+function getOwnerId(username) {
+    return new Promise((resolve, reject) => {
+        console.log('Sending request for owner ID with username:', username); // Log the username
+        $.ajax({
+            url: 'ChangeUserInfo',
+            type: 'GET',
+            data: {
+                username: username
+            },
+            success: function(response) {
+                // Parse the response as JSON
+                const responseData = JSON.parse(response);
+                console.log('Received response:', responseData); // Log the parsed response
+                // Resolve the promise with the owner ID
+                if (responseData.ownerId) {
+                    console.log('Owner ID:', responseData.ownerId);
+                    resolve(responseData.ownerId);
+                } else {
+                    console.error('Owner ID not found in response');
+                    reject('Owner ID not found in response');
+                }
+            },
+            error: function(error) {
+                // Reject the promise with the error
+                console.error('Error:', error);
+                reject(error);
+            }
+        });
+    });
+}
