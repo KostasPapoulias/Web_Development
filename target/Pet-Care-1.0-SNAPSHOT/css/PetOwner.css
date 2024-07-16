@@ -10,6 +10,20 @@ body{
 .person{
     border: solid 1px black;
 }
+#booking_form{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 27.5%;
+    border: solid 1px black;
+    height: auto;
+    position: absolute;
+    top: 56%;
+    left: 0;
+    margin-left: 8%;
+
+}
 #booking_container{
     background-color: white;
     border: solid 1px black;
@@ -28,9 +42,8 @@ body{
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 40%;
-    border: solid 1px black;
+    /*border: solid 1px black;*/
     height: auto;
     position: absolute;
     top: 0;
@@ -47,6 +60,11 @@ body{
     position: absolute;
     top: 0;
     right: 0;
+}
+#booking_context{
+    width: 200%;
+    height: 150%;
+    overflow-y: auto;
 }
 
 #booked_context{
@@ -72,8 +90,6 @@ body{
     height: 200px;
     overflow: auto; /* Add this line */
     overflow-y: scroll; /* Add this line */
-
-
 
 }
 

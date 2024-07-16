@@ -5,7 +5,6 @@ let petKeeperUsername;
 console.log("username :" + GlobalUsername);
 getPetOwnerId();
 
-getPetKeepers();
 
 
 
@@ -13,7 +12,12 @@ function getPetOwnerId() {
     getOwnerId(GlobalUsername).then(ownerId => {
         console.log('Owner ID:', ownerId);
         GlobalOwnerId = ownerId;
-        getPets(GlobalOwnerId)
+        getPets(GlobalOwnerId).then(type => {
+            console.log('Type:', type);
+            getPetKeepers(type);
+        }).catch(error => {
+            console.error('Error:', error);
+        });
     }).catch(error => {
         console.error('Error:', error);
     });
@@ -96,35 +100,71 @@ function displayPets(pets) {
     return html;
 }
 function getPets(GlobalOwnerId) {
-    $.ajax({
-        url: 'GetPostPets?',
-        type: 'GET',
-        data: {
-            owner_id: GlobalOwnerId
-        },
-        success: function (data) {
-            // Process the received data
-            const ajaxContent = $('#pets');
-            if (data.length > 0) {
-                ajaxContent.html(displayPets(data));
-            } else {
-                console.log(data + "Owner Id " + GlobalOwnerId)
-                ajaxContent.html('No pets found.');
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'GetPostPets?',
+            type: 'GET',
+            data: {
+                owner_id: GlobalOwnerId
+            },
+            success: function (data) {
+                // Process the received data
+                const ajaxContent = $('#pets');
+                if (data.length > 0) {
+                    ajaxContent.html(displayPets(data));
+                    let type = seePetType(data);
+                    resolve(type); // Resolve the Promise with the type value
+                } else {
+                    console.log(data + "Owner Id " + GlobalOwnerId)
+                    ajaxContent.html('No pets found.');
+                    resolve(null);
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching pets:', error);
+                reject(error);
             }
-        },
-        error: function (error) {
-            console.error('Error fetching pets:', error);
-        }
+        });
     });
+}
 
+function seePetType(pets) {
+    let hasCats = false;
+    let hasDogs = false;
+    let hasBoth = false;
+
+    for (let i = 0; i < pets.length; i++) {
+        if (pets[i].type === 'cat') {
+            hasCats = true;
+        } else if (pets[i].type === 'dog') {
+            hasDogs = true;
+        }
+    }
+
+    if (hasCats && hasDogs) {
+        hasBoth = true;
+    }
+
+    if (hasBoth) {
+        console.log('The pets are both cats and dogs.');
+        return "all"
+    } else if (hasCats) {
+        console.log('The pets are cats.');
+        return "catKeepers"
+    } else if (hasDogs) {
+        console.log('The pets are dogs.');
+        return "dogKeepers"
+    } else {
+        console.log('There are no cats or dogs.');
+    }
 }
 
 function displayPetKeepers(petKeepers) {
     var petKeepersList = $('#booking_context');
     petKeepersList.empty();
-
+    console.log(petKeepers)
     if (petKeepers && petKeepers.length > 0) {
-        // Loop through each pet keeper and display their details
+        // Loop through each filtered pet keeper and display their details
         petKeepers.forEach(function (petKeeper) {
             var petKeeperElement = $('<div class="person">Username: ' + petKeeper.username + ', Name ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
             var bookButton = $('<button style="display: none;">Book</button>');
@@ -138,6 +178,7 @@ function displayPetKeepers(petKeepers) {
             bookButton.click(function(e) {
                 e.stopPropagation(); // Prevent the petKeeperElement click event from firing
                 console.log(petKeeper.username);
+                makeBooking(petKeeper);
             });
             petKeepersList.append(petKeeperElement);
         });
@@ -145,6 +186,54 @@ function displayPetKeepers(petKeepers) {
         petKeepersList.append('<p>No pet keepers found.</p>');
     }
 }
+
+function makeBooking(petKeeper) {
+    // Create the form
+    var form = $('<form id="form"></form>');
+    form.append('<label for="name">Name:</label><br>');
+    form.append('<input type="text" id="name" name="name" value="' + petKeeper.username + '" readonly><br>'); // The name is read-only
+    form.append('<label for="price">Price:</label><br>');
+    form.append('<input type="text" id="price" name="price"> + petKeeper.<br>'); // You'll need to set the price
+    form.append('<label for="from">From:</label><br>');
+    form.append('<input type="date" id="from" name="from"><br>');
+    form.append('<label for="to">To:</label><br>');
+    form.append('<input type="date" id="to" name="to"><br>');
+    form.append('<input type="submit" value="Submit">');
+
+    // Add the form to the page
+    $('#formBook').append(form);
+
+    // Add an event listener to the form
+    form.on('submit', function(e) {
+        e.preventDefault(); // Prevent the form from being submitted normally
+
+        // Prepare data for sending
+        var formData = new FormData(form[0]);
+        var data = {};
+        formData.forEach((value, key) => (data[key] = value));
+
+        data.owner_id = GlobalOwnerId;
+        data.pet_keeper_username = petKeeperUsername;
+        console.log(data);
+
+        // Make the AJAX request
+        $.ajax({
+            url: 'GetPostBooking?',
+            type: 'POST',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function(response) {
+                // Process the response
+                console.log('Booking successful:', response);
+            },
+            error: function(error) {
+                console.error('Error making booking:', error);
+            }
+        });
+    });
+}
+
+
 
 function displayMessage(petKeepers) {
     var petKeepersList = $('#message');
@@ -176,11 +265,13 @@ function displayMessage(petKeepers) {
 
 
 
-function getPetKeepers() {
-
+function getPetKeepers(type) {
     $.ajax({
         url: 'GetAllPetKeepers?',
         type: 'GET',
+        data: {
+            type: type // Pass the type parameter to the server
+        },
         dataType: 'json',
         success: function (data) {
             // Process the received data

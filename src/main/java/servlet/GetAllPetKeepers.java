@@ -54,9 +54,11 @@ public class GetAllPetKeepers extends HttpServlet {
 
         try ( PrintWriter out = response.getWriter()) {
             EditPetKeepersTable eut = new EditPetKeepersTable();
-
-            // Retrieve all PetKeepers from the database
-            String type = "all"; // Fetch all types of keepers, modify if needed
+            // Retrieve the type from the request parameters
+            String type = request.getParameter("type");
+            if (type == null) {
+                type = "all"; // Default to "all" if no type parameter is provided
+            }
             ArrayList<PetKeeper> petKeepers = eut.getAvailableKeepers(type);
 
             // Convert the list of PetKeepers to JSON

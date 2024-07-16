@@ -45,6 +45,10 @@
         <servlet-class>servlet.GetPostPets</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GetPostBooking</servlet-name>
+        <servlet-class>servlet.GetPostBooking</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ChangePetOwnerInfo</servlet-name>
         <servlet-class>servlet.ChangePetOwnerInfo</servlet-class>
     </servlet>
@@ -91,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>ChangeUserInfo</servlet-name>
         <url-pattern>/ChangePetOwnerInfo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetPostBooking</servlet-name>
+        <url-pattern>/GetPostBooking</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
