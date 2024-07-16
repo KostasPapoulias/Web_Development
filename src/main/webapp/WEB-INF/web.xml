@@ -41,8 +41,8 @@
         <servlet-class>servlet.ChangeUserInfo</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CreatePet</servlet-name>
-        <servlet-class>servlet.CreatePet</servlet-class>
+        <servlet-name>GetPostPets</servlet-name>
+        <servlet-class>servlet.GetPostPets</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePetOwnerInfo</servlet-name>
@@ -85,8 +85,8 @@
         <url-pattern>/ChangeUserInfo</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CreatePet</servlet-name>
-        <url-pattern>/CreatePet</url-pattern>
+        <servlet-name>GetPostPets</servlet-name>
+        <url-pattern>/GetPostPets</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ChangeUserInfo</servlet-name>

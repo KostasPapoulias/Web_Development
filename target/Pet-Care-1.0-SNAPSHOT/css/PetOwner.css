@@ -1,14 +1,179 @@
 body{
     background-color: rgb(124, 155, 166);
-    display: flex;
-
+    display: grid;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
 }
+.person{
+    border: solid 1px black;
+}
+#booking_container{
+    background-color: white;
+    border: solid 1px black;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 50%;
+    margin-top: 1%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 8%;
 
+}
+#booking{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    border: solid 1px black;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#booked{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    border: solid 1px black;
+    height: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#booked_context{
+    display: none;
+    cursor: pointer;
+}
+#pets_container{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 26.5%;
+    border: solid 1px black;
+    /* height: 40%; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 1%;
+    margin-left: 40%;
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    align-items: flex-start; /* Align items at the start of the container */
+    text-align: center;
+    height: 200px;
+    overflow: auto; /* Add this line */
+    overflow-y: scroll; /* Add this line */
+
+
+
+}
+
+#pets{
+
+}
+#message_container{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 26.5%;
+    border: solid 1px black;
+    /* height: 40%; */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 1%;
+    margin-left: 40%;
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    align-items: flex-start; /* Align items at the start of the container */
+    text-align: center;
+    overflow: hidden;
+    transition: min-height 1s ease-out, max-height 1s ease-out; /* Add min-height to the transition property */
+    max-height: 55px; /* Start in a collapsed state */
+}
+
+
+#message_container.expanded {
+    min-height: 500px; /* Adjust based on the content size */
+}
+#change_info_container{
+    
+
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 18%;
+    border: solid 1px black;
+    /* height: 40%; */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 1%;
+    margin-right: 8%;
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    align-items: flex-start; /* Align items at the start of the container */
+    text-align: center;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    max-height: 55px; /* Start in a collapsed state */
+    /*display: flex;*/
+    /*flex-direction: column;*/
+
+}
+#text_area{
+    margin-top: auto;
+}
+
+
+#change_info_container.expanded, #newPet_container.expanded {
+    transition: max-height 0.5s ease-out;
+    max-height: 2000px; /* Large enough to show the whole content when expanded */
+}
+
+#newPet_container{
+    
+    background-color: white;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 20%;
+    border: solid 1px black;
+    height: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 1%;
+    margin-right: 8%;
+    align-items: flex-start; /* Align items at the start of the container */
+    text-align: center;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    max-height: 2000px; /* Large enough to show the whole content when expanded */
+}
+
+#newPet_container.collapsed {
+    transition: max-height 0.5s ease-out;
+    max-height: 55px; /* Adjust based on the header size */
+}
+#feedback_container{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    border: solid 1px black;
+
+}
 
 #th, td{
     background-color: bisque;

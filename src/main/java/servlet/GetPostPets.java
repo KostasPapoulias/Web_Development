@@ -12,8 +12,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
-public class CreatePet extends HttpServlet {
+public class GetPostPets extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,6 +61,27 @@ public class CreatePet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String ownerId = request.getParameter("owner_id");
+        EditPetsTable editPetsTable = new EditPetsTable();
+        ArrayList<Pet> pets;
+        try {
+            pets = editPetsTable.getPetsByOwnerId(ownerId);
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            response.setStatus(500);
+            response.getWriter().println("{ \"status\": \"error\", \"message\": \"Internal Server Error.\" }");
+            return;
+        }
+
+        Gson gson = new Gson();
+        String petsJson = gson.toJson(pets);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(petsJson);
+    }
 
     @Override
     public String getServletInfo() {

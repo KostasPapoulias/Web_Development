@@ -120,6 +120,35 @@ public class EditPetsTable {
         con.close();
     }
 
+    /**
+     * Get all pets from the database that belong to a specific owner.
+     * @param ownerId
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
+    public ArrayList<Pet> getPetsByOwnerId(String ownerId) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.Connect.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Pet> pets = new ArrayList<Pet>();
+        ResultSet rs;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM pets WHERE owner_id= '" + ownerId + "'");
+
+            while (rs.next()) {
+                String json = DB_Connection.Connect.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Pet pet = gson.fromJson(json, Pet.class);
+                pets.add(pet);
+            }
+            return pets;
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return null;
+    }
+
     public void createPetsTable() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.Connect.getConnection();
         Statement stmt = con.createStatement();
