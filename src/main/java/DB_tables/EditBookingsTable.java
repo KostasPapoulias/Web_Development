@@ -4,10 +4,10 @@ package DB_tables;
 import com.google.gson.Gson;
 import mainClasses.Booking;
 import DB_Connection.Connect;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,6 +52,27 @@ public class EditBookingsTable {
 
         String json = gson.toJson(r, Booking.class);
         return json;
+    }
+    /**
+     * Retrieves all unique pet IDs for a given owner ID from the bookings table.
+     * @param ownerId The owner ID to search for.
+     * @return A list of unique pet IDs belonging to the owner in the bookings.
+     */
+    public List<String> getPetIdsByOwnerId(int ownerId) {
+        List<String> petIds = new ArrayList<>();
+        String query = "SELECT DISTINCT pet_id FROM bookings WHERE owner_id = ?";
+        try (Connection con = Connect.getConnection();
+             PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, ownerId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    petIds.add(rs.getString("pet_id"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return petIds;
     }
 
     public void updateBooking(int bookingID,  String status) throws SQLException, ClassNotFoundException {
