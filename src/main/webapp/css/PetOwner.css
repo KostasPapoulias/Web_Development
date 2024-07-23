@@ -9,6 +9,7 @@ body{
 }
 .person{
     border: solid 1px black;
+    height: 100px;
 }
 #booking_form{
     background-color: white;

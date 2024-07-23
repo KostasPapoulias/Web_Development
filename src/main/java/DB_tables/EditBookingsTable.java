@@ -4,6 +4,7 @@ package DB_tables;
 import com.google.gson.Gson;
 import mainClasses.Booking;
 import DB_Connection.Connect;
+import mainClasses.Pet;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,22 +59,8 @@ public class EditBookingsTable {
      * @param ownerId The owner ID to search for.
      * @return A list of unique pet IDs belonging to the owner in the bookings.
      */
-    public List<String> getPetIdsByOwnerId(int ownerId) {
-        List<String> petIds = new ArrayList<>();
-        String query = "SELECT DISTINCT pet_id FROM bookings WHERE owner_id = ?";
-        try (Connection con = Connect.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(query)) {
-            pstmt.setInt(1, ownerId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    petIds.add(rs.getString("pet_id"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return petIds;
-    }
+
+
 
     public void updateBooking(int bookingID,  String status) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.Connect.getConnection();
@@ -84,13 +71,38 @@ public class EditBookingsTable {
         con.close();
     }
 
+    public ArrayList<String> getPetIdsByOwnerIdFromBookings(String ownerId) throws SQLException, ClassNotFoundException {
+        ArrayList<String> petIds = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            con = DB_Connection.Connect.getConnection();
+            String query = "SELECT DISTINCT pet_id FROM bookings WHERE owner_id = ?";
+            pstmt = con.prepareStatement(query);
+            pstmt.setString(1, ownerId);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                petIds.add(rs.getString("pet_id"));
+            }
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignored */ }
+            if (pstmt != null) try { pstmt.close(); } catch (SQLException e) { /* ignored */ }
+            if (con != null) try { con.close(); } catch (SQLException e) { /* ignored */ }
+        }
+        return petIds;
+    }
+
     public void createBookingTable() throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.Connect.getConnection();
         Statement stmt = con.createStatement();
         String sql = "CREATE TABLE bookings "
                 + "(booking_id INTEGER not NULL AUTO_INCREMENT, "
                 + " owner_id INTEGER not NULL, "
-                + "  pet_id VARCHAR(10) not NULL, "
+                + " pet_id VARCHAR(10) not NULL, "
                 + " keeper_id INTEGER not NULL, "
                 + " fromdate DATE not NULL, "
                 + " todate DATE not NULL, "
