@@ -116,11 +116,14 @@ body{
     overflow: hidden;
     transition: min-height 1s ease-out, max-height 1s ease-out; /* Add min-height to the transition property */
     max-height: 55px; /* Start in a collapsed state */
+
+
+
 }
 
 
 #message_container.expanded {
-    min-height: 500px; /* Adjust based on the content size */
+    min-height: 400px; /* Adjust based on the content size */
 }
 #change_info_container{
     
@@ -148,7 +151,8 @@ body{
 
 }
 #text_area{
-    margin-top: auto;
+    display: hidden;
+
 }
 
 

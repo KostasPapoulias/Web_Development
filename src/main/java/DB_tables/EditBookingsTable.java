@@ -71,6 +71,33 @@ public class EditBookingsTable {
         con.close();
     }
 
+    public List<Booking> getAllBookings() throws SQLException, ClassNotFoundException {
+        List<Booking> bookings = new ArrayList<>();
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            con = DB_Connection.Connect.getConnection();
+            stmt = con.createStatement();
+            String sql = "SELECT * FROM bookings";
+            rs = stmt.executeQuery(sql);
+            Gson gson = new Gson();
+            while (rs.next()) {
+                String json = DB_Connection.Connect.getResultsToJSON(rs);
+                Booking booking = gson.fromJson(json, Booking.class);
+                bookings.add(booking);
+            }
+        } catch (SQLException e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) { /* ignored */ }
+            if (stmt != null) try { stmt.close(); } catch (SQLException e) { /* ignored */ }
+            if (con != null) try { con.close(); } catch (SQLException e) { /* ignored */ }
+        }
+        return bookings;
+    }
+
     public ArrayList<String> getPetIdsByOwnerIdFromBookings(String ownerId) throws SQLException, ClassNotFoundException {
         ArrayList<String> petIds = new ArrayList<>();
         Connection con = null;
@@ -116,6 +143,21 @@ public class EditBookingsTable {
         stmt.close();
         con.close();
 
+    }
+
+    public ArrayList<Integer> getAllKeeperIds() throws SQLException, ClassNotFoundException {
+        ArrayList<Integer> keeperIds = new ArrayList<>();
+        Connection con = DB_Connection.Connect.getConnection();
+        Statement stmt = con.createStatement();
+        String sql = "SELECT DISTINCT keeper_id FROM bookings";
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            keeperIds.add(rs.getInt("keeper_id"));
+        }
+        rs.close();
+        stmt.close();
+        con.close();
+        return keeperIds;
     }
 
     /**

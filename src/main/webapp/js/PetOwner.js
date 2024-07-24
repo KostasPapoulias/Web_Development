@@ -267,7 +267,6 @@ function makeBooking(petKeeper, pet) {
             data: JSON.stringify(data),
             contentType: 'application/json',
             success: function(response) {
-                // Process the response
                 console.log('Booking successful:', response);
             },
             error: function(error) {
@@ -289,11 +288,10 @@ function getPetKeepers(type) {
         url: 'GetAllPetKeepers?',
         type: 'GET',
         data: {
-            type: type 
+            type: type
         },
         dataType: 'json',
         success: function (data) {
-            // Process the received data
             GetPetsWithNoBooking();
             setTimeout(function() {
                 displayPetKeepers(data, type);
@@ -368,36 +366,86 @@ function getPetsList(GlobalOwnerId) {
         });
     });
 }
-//TODO get petkeeper from booking
 
-function displayMessage(petKeepers) {
-    var petKeepersList = $('#message');
-    petKeepersList.empty();
-
-    if (petKeepers && petKeepers.length > 0) {
-        // Loop through each pet keeper and display their details
-        petKeepers.forEach(function (petKeeper) {
-            var petKeeperElement = $('<div class="person"> Name ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
-            var selectButton = $('<button style="display: none;">Select</button>');
-            petKeeperElement.append(selectButton);
-            petKeeperElement.click(function() {
-                // Hide all other buttons
-                $('button', petKeepersList).hide();
-                // Toggle the visibility of this pet keeper's button
-                selectButton.toggle();
-            });
-            selectButton.click(function(e) {
-                e.stopPropagation(); // Prevent the petKeeperElement click event from firing
-                console.log(petKeeper.username);
-                petKeeperUsername = petKeeper.username;
-            });
-            petKeepersList.append(petKeeperElement);
+function getKeeperIdsFromBookings() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'bookingIds',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            },
+            error: function(error) {
+                console.error('Error fetching keeper IDs:', error);
+                reject(error);
+            }
         });
-    } else {
-        petKeepersList.append('<p>No pet keepers found.</p>');
-    }
+    });
 }
 
+function fetchPetKeepers() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'GetAllAllPetKeepers?',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log('Received pet keepers:', data);
+                resolve(data);
+            },
+            error: function(error) {
+                console.error('Error fetching pet keepers:', error);
+                reject(error);
+            }
+        });
+    });
+
+}
+
+//TODO get petkeeper from booking
+
+function displayMessage() {
+
+    fetchPetKeepers().then(petKeepers => {
+        getKeeperIdsFromBookings().then(keeperIdsFromBookings => {
+            console.log("petKeepers: " + JSON.stringify(petKeepers, null, 2));
+            let petKeepersList = $('#users_message');
+            petKeepersList.empty();
+            console.log("owner id"+GlobalOwnerId)
+            console.log(keeperIdsFromBookings); // Debugging: prints the keeperIdsFromBookings array
+            const relevantKeeperIds = keeperIdsFromBookings.filter(booking => booking.owner_id === GlobalOwnerId).map(booking => booking.keeper_id);
+            console.log(relevantKeeperIds); // Debugging: prints the relevantKeeperIds array
+            const filteredPetKeepers = petKeepers.filter(petKeeper => relevantKeeperIds.includes(petKeeper.keeper_id));
+            console.log(filteredPetKeepers); // Debugging: prints the filteredPetKeepers array
+            if (filteredPetKeepers && filteredPetKeepers.length > 0) {
+                filteredPetKeepers.forEach(function(petKeeper) {
+                    var petKeeperElement = $('<div class="person"> Name ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
+                    var selectButton = $('<button style="display: none;">Select</button>');
+                    petKeeperElement.append(selectButton);
+                    petKeeperElement.click(function() {
+                        // Hide all other buttons
+                        $('button', petKeepersList).hide();
+                        // Toggle the visibility of this pet keeper's button
+                        selectButton.toggle();
+                    });
+                    selectButton.click(function(e) {
+                        e.stopPropagation(); // Prevent the petKeeperElement click event from firing
+                        console.log(petKeeper.username);
+                        petKeeperUsername = petKeeper.username;
+                    });
+                    petKeepersList.append(petKeeperElement);
+                });
+            } else {
+                petKeepersList.append('<p>No pet keepers found in bookings.</p>');
+            }
+        }).catch(error => {
+            console.error('Error fetching keeper IDs from bookings:', error);
+        });
+    }).catch(error => {
+        console.error('Error fetching pet keepers:', error);
+    });
+}
 /**
  * Change the user info on the server
  * @constructor

@@ -37,6 +37,10 @@
         <servlet-class>servlet.GetAllPetOwners</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GetAllAllPetKeepers</servlet-name>
+        <servlet-class>servlet.GetAllAllPetKeepers</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ChangeUserInfo</servlet-name>
         <servlet-class>servlet.ChangeUserInfo</servlet-class>
     </servlet>
@@ -48,13 +52,14 @@
         <servlet-name>GetPostBooking</servlet-name>
         <servlet-class>servlet.GetPostBooking</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>ChangePetOwnerInfo</servlet-name>
-        <servlet-class>servlet.ChangePetOwnerInfo</servlet-class>
-    </servlet>
+
     <servlet>
         <servlet-name>booking</servlet-name>
         <servlet-class>servlet.booking</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>bookingIds</servlet-name>
+        <servlet-class>servlet.bookingIds</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
@@ -89,6 +94,10 @@
         <url-pattern>/GetAllPetOwners</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>GetAllAllPetKeepers</servlet-name>
+        <url-pattern>/GetAllAllPetKeepers</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ChangeUserInfo</servlet-name>
         <url-pattern>/ChangeUserInfo</url-pattern>
     </servlet-mapping>
@@ -107,6 +116,10 @@
     <servlet-mapping>
         <servlet-name>booking</servlet-name>
         <url-pattern>/booking</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>bookingIds</servlet-name>
+        <url-pattern>/bookingIds</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
