@@ -117,17 +117,58 @@ body{
     transition: min-height 1s ease-out, max-height 1s ease-out; /* Add min-height to the transition property */
     max-height: 55px; /* Start in a collapsed state */
 
-
-
 }
 
+#messages{
+    border: solid black;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    width: 91%;
+    height: 80%;
+}
 
 #message_container.expanded {
     min-height: 400px; /* Adjust based on the content size */
 }
-#change_info_container{
-    
 
+#text_area{
+    position: absolute;
+    bottom: 10px;
+    left: 30px;
+    width: 300px;
+}
+#sendButton{
+    position: absolute;
+    bottom: 10px;
+    right: 60px;
+}
+#back{
+    position: absolute;
+    top: 2px;
+    left: 2px;
+}
+#msg_cont{
+    display: none;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 400px;
+    border: solid 1px black;
+    /* height: 40%; */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    align-items: flex-start; /* Align items at the start of the container */
+    text-align: center;
+    overflow: hidden;
+
+}
+
+#change_info_container{
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -148,10 +189,6 @@ body{
     max-height: 55px; /* Start in a collapsed state */
     /*display: flex;*/
     /*flex-direction: column;*/
-
-}
-#text_area{
-    display: hidden;
 
 }
 

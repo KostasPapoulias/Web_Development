@@ -7,8 +7,6 @@ console.log("username :" + GlobalUsername);
 retrieveData();
 
 
-//TODO ADDITIONAL INFORMATION DISPLAYED
-
 /**
  * asynchronous call on getting pet owner's id thus call made again
  * retrieves pet owner's id
@@ -84,6 +82,17 @@ document.addEventListener('DOMContentLoaded', function() {
         messageContainer.classList.toggle('expanded');
     });
 });
+document.addEventListener('DOMContentLoaded', function (){
+    const msg_cont = document.getElementById('msg_cont');
+    const users_message = document.getElementById('users_message');
+    const back = document.getElementById('back');
+
+    back.addEventListener('click', function() {
+        users_message.style.display = 'block';
+        msg_cont.style.display = 'none';
+    });
+})
+
 
 function createTableFromJSON(data) {
     var html = "<table><tr><th>Category</th><th>Value</th></tr>";
@@ -149,7 +158,6 @@ function getPets(GlobalOwnerId) {
         });
     });
 }
-// in the displayPetKeepers, i want , if the type is both to have an option to decide between the dog keeper and the cat keeper and by default it will have the dog keeper and it will show only the selected one
 
 /**
  * returns the type that petOwner has registered
@@ -185,7 +193,6 @@ function seePetType(pets) {
     }
 }
 
-//SEPARATE FOR MAKE BOOKING
 function displayPetKeepers(petKeepers, type) {
     var petKeepersList = $('#booking_context');
     petKeepersList.empty();
@@ -400,39 +407,35 @@ function fetchPetKeepers() {
             }
         });
     });
+}
+
+function userMessage(petKeeper, bookings) {
+    const msg_cont = document.getElementById('msg_cont');
+    const users_message = document.getElementById('users_message');
+
+    msg_cont.style.display = 'block';
+    users_message.style.display = 'none';
+    let msg = $('#messages');
+    msg.empty();
+    msg.append('<h2>' + petKeeper.username + '</h2>' + '<br>');
+    console.log(bookings);
+    console.log(GlobalOwnerId);
 
 }
 
-//TODO get petkeeper from booking
-
 function displayMessage() {
-
     fetchPetKeepers().then(petKeepers => {
         getKeeperIdsFromBookings().then(keeperIdsFromBookings => {
-            console.log("petKeepers: " + JSON.stringify(petKeepers, null, 2));
             let petKeepersList = $('#users_message');
             petKeepersList.empty();
-            console.log("owner id"+GlobalOwnerId)
-            console.log(keeperIdsFromBookings); // Debugging: prints the keeperIdsFromBookings array
             const relevantKeeperIds = keeperIdsFromBookings.filter(booking => booking.owner_id === GlobalOwnerId).map(booking => booking.keeper_id);
-            console.log(relevantKeeperIds); // Debugging: prints the relevantKeeperIds array
             const filteredPetKeepers = petKeepers.filter(petKeeper => relevantKeeperIds.includes(petKeeper.keeper_id));
-            console.log(filteredPetKeepers); // Debugging: prints the filteredPetKeepers array
             if (filteredPetKeepers && filteredPetKeepers.length > 0) {
                 filteredPetKeepers.forEach(function(petKeeper) {
                     var petKeeperElement = $('<div class="person"> Name ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
-                    var selectButton = $('<button style="display: none;">Select</button>');
-                    petKeeperElement.append(selectButton);
+
                     petKeeperElement.click(function() {
-                        // Hide all other buttons
-                        $('button', petKeepersList).hide();
-                        // Toggle the visibility of this pet keeper's button
-                        selectButton.toggle();
-                    });
-                    selectButton.click(function(e) {
-                        e.stopPropagation(); // Prevent the petKeeperElement click event from firing
-                        console.log(petKeeper.username);
-                        petKeeperUsername = petKeeper.username;
+                        userMessage(petKeeper, keeperIdsFromBookings);
                     });
                     petKeepersList.append(petKeeperElement);
                 });
