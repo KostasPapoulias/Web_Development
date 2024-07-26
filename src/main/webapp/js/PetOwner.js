@@ -381,6 +381,7 @@ function getKeeperIdsFromBookings() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
+                console.log(data)
                 resolve(data);
             },
             error: function(error) {
@@ -412,15 +413,72 @@ function fetchPetKeepers() {
 function userMessage(petKeeper, bookings) {
     const msg_cont = document.getElementById('msg_cont');
     const users_message = document.getElementById('users_message');
-
     msg_cont.style.display = 'block';
     users_message.style.display = 'none';
     let msg = $('#messages');
     msg.empty();
     msg.append('<h2>' + petKeeper.username + '</h2>' + '<br>');
-    console.log(bookings);
-    console.log(GlobalOwnerId);
+    const booking_id = bookings.filter(booking => booking.keeper_id === petKeeper.keeper_id).map(booking => booking.booking_id);
+    getMessages(booking_id).then(messages => {
+        if (messages && messages.length > 0) {
+            messages.forEach(function(message) {
+                var messageElement = $('<div class="message">From: ' + message.sender + '<br>' + message.message + '</div>');
+                msg.append(messageElement);
+            });
+        } else {
+            msg.append('<p>No messages found.</p>');
+        }
+    });
 
+    document.getElementById('sendButton').addEventListener('click', function() {
+        const textArea = document.getElementById('text_area');
+        const messageContent = textArea.value.trim();
+
+        if (messageContent) {
+            const data = {
+                booking_id: booking_id,
+                content: messageContent,
+                sender: GlobalUsername,
+                datetime: new Date().toISOString().split('T')[0],
+            };
+
+            $.ajax({
+                url: 'Message',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    console.log('Message sent successfully:', response);
+                    textArea.value = '';
+                },
+                error: function(error) {
+                    console.error('Error sending message:', error);
+                }
+            });
+        } else {
+            console.log('Message content is empty.');
+        }
+    });
+}
+
+function getMessages(bookingId) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'Message',
+            type: 'GET',
+            data: {
+                booking_id: bookingId
+            },
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            },
+            error: function(error) {
+                console.error('Error fetching messages:', error);
+                reject(error);
+            }
+        });
+    });
 }
 
 function displayMessage() {

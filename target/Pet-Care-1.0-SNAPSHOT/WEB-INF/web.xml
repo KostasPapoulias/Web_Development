@@ -61,6 +61,10 @@
         <servlet-name>bookingIds</servlet-name>
         <servlet-class>servlet.bookingIds</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Message</servlet-name>
+        <servlet-class>servlet.Message</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -120,6 +124,10 @@
     <servlet-mapping>
         <servlet-name>bookingIds</servlet-name>
         <url-pattern>/bookingIds</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Message</servlet-name>
+        <url-pattern>/Message</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
