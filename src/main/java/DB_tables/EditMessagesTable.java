@@ -36,8 +36,30 @@ public class EditMessagesTable {
         String json = gson.toJson(msg, Message.class);
         return json;
     }
-
-    public ArrayList<Message> databaseToMessage(int booking_id) throws SQLException, ClassNotFoundException {
+    public ArrayList<Message> getAllMessagesByBookingId(String booking_id) throws SQLException, ClassNotFoundException {
+        Connection con = DB_Connection.Connect.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Message> messages = new ArrayList<>();
+        ResultSet rs;
+        try {
+            String query = "SELECT * FROM messages WHERE booking_id= '" + booking_id + "'";
+            rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                String json = DB_Connection.Connect.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Message msg = gson.fromJson(json, Message.class);
+                messages.add(msg);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (stmt != null) stmt.close();
+            if (con != null) con.close();
+        }
+        return messages;
+    }
+    public ArrayList<Message> databaseToMessage(String booking_id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.Connect.getConnection();
         Statement stmt = con.createStatement();
         ArrayList<Message> messages=new ArrayList<Message>();
@@ -51,8 +73,6 @@ public class EditMessagesTable {
                 messages.add(msg);
             }
             return messages;
-
-
         } catch (Exception e) {
             System.err.println("Got an exception! ");
 

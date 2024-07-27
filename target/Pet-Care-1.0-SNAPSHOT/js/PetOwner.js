@@ -428,31 +428,46 @@ function userMessage(petKeeper, bookings) {
         } else {
             msg.append('<p>No messages found.</p>');
         }
+    }).catch(error => {
+        console.error('Error fetching messages:', error); // Log the error
     });
 
     document.getElementById('sendButton').addEventListener('click', function() {
         const textArea = document.getElementById('text_area');
         const messageContent = textArea.value.trim();
-
+        const now = new Date();
+        const date = now.toISOString().split('T')[0];
+        const time = now.toTimeString().split(' ')[0];
         if (messageContent) {
             const data = {
-                booking_id: booking_id,
-                content: messageContent,
+                booking_id: booking_id[0],
+                message: messageContent,
                 sender: GlobalUsername,
-                datetime: new Date().toISOString().split('T')[0],
+                datetime: `${date} ${time}`, // Combine date and time
             };
 
             $.ajax({
-                url: 'Message',
+                url: 'GetPostMessages',
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(response) {
                     console.log('Message sent successfully:', response);
                     textArea.value = '';
+
+                    // Create a new message element
+                    const messageElement = $('<div class="message">From: ' + data.sender + '<br>' + data.message + '</div>');
+                    // Append the new message to the message container
+                    $('#messages').append(messageElement);
                 },
-                error: function(error) {
-                    console.error('Error sending message:', error);
+                error: function(xhr, status, error) {
+                    console.error('Error sending message:', {
+                        readyState: xhr.readyState,
+                        status: xhr.status,
+                        responseText: xhr.responseText,
+                        statusText: xhr.statusText,
+                        error: error
+                    }); // Log the error
                 }
             });
         } else {
@@ -460,21 +475,22 @@ function userMessage(petKeeper, bookings) {
         }
     });
 }
-
 function getMessages(bookingId) {
+    console.log(bookingId);
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: 'Message',
+            url: 'GetPostMessages',
             type: 'GET',
             data: {
-                booking_id: bookingId
+                booking_id: bookingId[0]
             },
             dataType: 'json',
             success: function(data) {
                 resolve(data);
             },
-            error: function(error) {
-                console.error('Error fetching messages:', error);
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+
                 reject(error);
             }
         });

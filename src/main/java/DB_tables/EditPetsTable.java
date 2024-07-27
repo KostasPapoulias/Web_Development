@@ -134,7 +134,6 @@ public class EditPetsTable {
         ResultSet rs;
         try {
             rs = stmt.executeQuery("SELECT * FROM pets WHERE owner_id= '" + ownerId + "'");
-
             while (rs.next()) {
                 String json = DB_Connection.Connect.getResultsToJSON(rs);
                 Gson gson = new Gson();
