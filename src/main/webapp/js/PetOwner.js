@@ -12,7 +12,7 @@ retrieveData();
  * retrieves pet owner's id
  * retrieves pet owner's registered pets
  * gets pets' type
- * retrieves available pet keepers according on pets' type
+ * retrieves available pet keepers according to pets' type
  * displays pet keepers on screen - 
  *  - buttons are made and booking form is created
  * to be fixed messages pet keepers based on booking
@@ -120,14 +120,15 @@ function displayPets(pets) {
     }
     return html;
 }
-/**
- * 
- * @param {*} GlobalOwnerId 
- * @returns 
- */
+
 // Declare a global array to store pets
 let petsArray = [];
 
+/**
+ * this function returns the pets that belongs to the petOwner
+ * @param GlobalOwnerId is the owner_id
+ * @returns {Promise<unknown>} an array with the pets
+ */
 function getPets(GlobalOwnerId) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -137,14 +138,12 @@ function getPets(GlobalOwnerId) {
                 owner_id: GlobalOwnerId
             },
             success: function (data) {
-                // Process the received data
                 const ajaxContent = $('#pets');
                 if (data.length > 0) {
                     ajaxContent.html(displayPets(data));
                     let type = seePetType(data);
-                    // Save the pets data into the global array
                     petsArray = data;
-                    resolve(type); // Resolve the Promise with the type value
+                    resolve(type);
                 } else {
                     console.log(data + "Owner Id " + GlobalOwnerId)
                     ajaxContent.html('No pets found.');
@@ -160,7 +159,9 @@ function getPets(GlobalOwnerId) {
 }
 
 /**
- * returns the type that petOwner has registered
+ * returns the type of pets that petOwner has registered
+ * @param pets an array with the pets
+ * @returns {string} "all", "catKeepers" or "dogKeepers"
  */
 function seePetType(pets) {
     let hasCats = false;
@@ -193,8 +194,13 @@ function seePetType(pets) {
     }
 }
 
-function displayPetKeepers(petKeepers, type) {
+/**
+ * displays the pet keepers that are available for the petOwner
+ * @param petKeepers
+ */
+function displayPetKeepers(petKeepers) {
     var petKeepersList = $('#booking_context');
+
     petKeepersList.empty();
     console.log(petKeepers);
     console.log(unbookedPets);
@@ -204,21 +210,19 @@ function displayPetKeepers(petKeepers, type) {
             var bookForText = $('<span>Book for: </span>');
             petKeeperElement.append(bookForText);
 
-            // Filter unbookedPets based on petKeeper's capability
             let filteredPets = unbookedPets.filter(pet => {
                 if (petKeeper.catkeeper && petKeeper.dogkeeper) return true; // If keeper can keep both
-                else if (petKeeper.catkeeper && pet.type === 'cat') return true; // If keeper can keep cats and pet is a cat
-                else if (petKeeper.dogkeeper && pet.type === 'dog') return true; // If keeper can keep dogs and pet is a dog
-                return false; // Otherwise, do not include pet
+                else if (petKeeper.catkeeper && pet.type === 'cat') return true;
+                else if (petKeeper.dogkeeper && pet.type === 'dog') return true;
+                return false;
             });
 
-            // Create buttons for each filtered pet
             filteredPets.forEach(function (pet) {
                 var bookButton = $('<button>' + pet.name + '</button>');
                 bookButton.click(function(e) {
-                    e.stopPropagation(); // Prevent the petKeeperElement click event from firing
+                    e.stopPropagation();
                     console.log('Booking for pet:', pet.name, 'with keeper:', petKeeper.username);
-                    makeBooking(petKeeper, pet); // Adjust makeBooking to handle pet parameter
+                    makeBooking(petKeeper, pet);
                 });
                 petKeeperElement.append(bookButton);
             });
@@ -234,7 +238,6 @@ function displayPetKeepers(petKeepers, type) {
  * @param {*} petKeeper 
  */
 function makeBooking(petKeeper, pet) {
-    // Create the form
     var form = $('<form id="form"></form>');
     form.append('<label for="price">Price:</label><br>');
     form.append('<input type="text" id="price" name="price" value="' + petKeeper.dogprice + '" readonly><br>'); // You'll need to set the price
@@ -244,30 +247,26 @@ function makeBooking(petKeeper, pet) {
     form.append('<input type="date" id="toDate" name="toDate"><br>');
     form.append('<input type="submit" value="Submit">');
 
-    // Add the form to the page
     $('#formBook').append(form);
 
-    // Add an event listener to the form
     form.on('submit', function(e) {
-        e.preventDefault(); // Prevent the form from being submitted normally
+        e.preventDefault();
 
-        // Prepare data for sending
         var formData = new FormData(form[0]);
         var data = {};
         formData.forEach((value, key) => {
             if (key === 'price') {
-                data[key] = parseInt(value, 10); // Cast price to integer
+                data[key] = parseInt(value, 10);
             } else {
-                data[key] = value; // Treat pet_id and other fields as characters
+                data[key] = value;
             }
         });
         data.owner_id = GlobalOwnerId;
         data.keeper_id = petKeeper.keeper_id;
         data.status = "requested"
-        data.pet_id = pet.pet_id.toString(); // Ensure pet_id is treated as a character
+        data.pet_id = pet.pet_id.toString();
         console.log(data);
 
-        // Make the AJAX request
         $.ajax({
             url: 'booking?',
             type: 'POST',
@@ -283,7 +282,31 @@ function makeBooking(petKeeper, pet) {
     });
 }
 
+function displayBookedPetKeepers() {
+    fetchPetKeepers().then(petKeepers => {
+        getBookings().then(bookings => {
+            let bookedPetKeepersList = $('#booked_context');
+            bookedPetKeepersList.empty();
 
+            const relevantBookings = bookings.filter(booking => booking.owner_id === GlobalOwnerId);
+            const relevantKeeperIds = relevantBookings.map(booking => booking.keeper_id);
+            const filteredPetKeepers = petKeepers.filter(petKeeper => relevantKeeperIds.includes(petKeeper.keeper_id));
+
+            if (filteredPetKeepers && filteredPetKeepers.length > 0) {
+                filteredPetKeepers.forEach(function(petKeeper) {
+                    var petKeeperElement = $('<div class="person">' + petKeeper.firstname + ' ' + petKeeper.lastname + '<br>' + petKeeper.city + ' ' + petKeeper.address + '<br>' + petKeeper.telephone + '<br>' + petKeeper.propertydescription + '<br>' + '</div>');
+                    bookedPetKeepersList.append(petKeeperElement);
+                });
+            } else {
+                bookedPetKeepersList.append('<p>No pet keepers found in bookings.</p>');
+            }
+        }).catch(error => {
+            console.error('Error fetching bookings:', error);
+        });
+    }).catch(error => {
+        console.error('Error fetching pet keepers:', error);
+    });
+}
 
 /**
  * return the available petKeepers based on the petOwner's pet type     (?)  split for messages
@@ -301,10 +324,10 @@ function getPetKeepers(type) {
         success: function (data) {
             GetPetsWithNoBooking();
             setTimeout(function() {
-                displayPetKeepers(data, type);
+                displayPetKeepers(data);
+                displayBookedPetKeepers();
                 displayMessage(data);
-            }, 200); // Wait before proceeding
-
+            }, 200);
 
         },
         error: function (error) {
@@ -313,6 +336,11 @@ function getPetKeepers(type) {
     });
 }
 let unbookedPets = [];
+
+/**
+ * Get pets with no booking
+ * @constructor
+ */
 function GetPetsWithNoBooking() {
     console.log("Attempting to retrieve pets with no booking for owner ID:", GlobalOwnerId);
 
@@ -323,10 +351,8 @@ function GetPetsWithNoBooking() {
             owner_id: GlobalOwnerId
         },
         success: function(bookingData) {
-            // const bookedPetIds = bookingData.map(booking => booking.pet_id);
             getPetsList(GlobalOwnerId).then(ownerPets => {
                 if (Array.isArray(ownerPets)) {
-                    // const ownerPetIds = ownerPets.map(pet => pet.pet_id);
                     const unbookedPetIds = ownerPets.filter(id => !bookingData.includes(id));
                     unbookedPets = unbookedPetIds;
                     console.log('Unbooked Pet IDs:', unbookedPetIds);
@@ -343,6 +369,11 @@ function GetPetsWithNoBooking() {
     });
 }
 
+/**
+ * Get the pets list for the given owner ID
+ * @param GlobalOwnerId
+ * @returns {Promise<unknown>}
+ */
 function getPetsList(GlobalOwnerId) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -357,9 +388,8 @@ function getPetsList(GlobalOwnerId) {
                 if (data.length > 0) {
                     ajaxContent.html(displayPets(data));
 
-                    // Save the pets data into the global array
                     petsArray = data;
-                    resolve(data); // Resolve the Promise with the type value
+                    resolve(data);
                 } else {
                     console.log(data + "Owner Id " + GlobalOwnerId)
                     ajaxContent.html('No pets found.');
@@ -374,7 +404,11 @@ function getPetsList(GlobalOwnerId) {
     });
 }
 
-function getKeeperIdsFromBookings() {
+/**
+ * Get the bookings from the server
+ * @returns {Promise<unknown>}
+ */
+function getBookings() {
     return new Promise((resolve, reject) => {
         $.ajax({
             url: 'bookingIds',
@@ -392,6 +426,10 @@ function getKeeperIdsFromBookings() {
     });
 }
 
+/**
+ * Fetch the pet keepers from the server
+ * @returns {Promise<unknown>}
+ */
 function fetchPetKeepers() {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -410,6 +448,11 @@ function fetchPetKeepers() {
     });
 }
 
+/**
+ * Display the messages between the pet owner and the pet keeper
+ * @param petKeeper
+ * @param bookings
+ */
 function userMessage(petKeeper, bookings) {
     const msg_cont = document.getElementById('msg_cont');
     const users_message = document.getElementById('users_message');
@@ -429,7 +472,7 @@ function userMessage(petKeeper, bookings) {
             msg.append('<p>No messages found.</p>');
         }
     }).catch(error => {
-        console.error('Error fetching messages:', error); // Log the error
+        console.error('Error fetching messages:', error);
     });
 
     document.getElementById('sendButton').addEventListener('click', function() {
@@ -443,7 +486,7 @@ function userMessage(petKeeper, bookings) {
                 booking_id: booking_id[0],
                 message: messageContent,
                 sender: GlobalUsername,
-                datetime: `${date} ${time}`, // Combine date and time
+                datetime: `${date} ${time}`,
             };
 
             $.ajax({
@@ -455,9 +498,7 @@ function userMessage(petKeeper, bookings) {
                     console.log('Message sent successfully:', response);
                     textArea.value = '';
 
-                    // Create a new message element
                     const messageElement = $('<div class="message">From: ' + data.sender + '<br>' + data.message + '</div>');
-                    // Append the new message to the message container
                     $('#messages').append(messageElement);
                 },
                 error: function(xhr, status, error) {
@@ -467,7 +508,7 @@ function userMessage(petKeeper, bookings) {
                         responseText: xhr.responseText,
                         statusText: xhr.statusText,
                         error: error
-                    }); // Log the error
+                    });
                 }
             });
         } else {
@@ -475,6 +516,12 @@ function userMessage(petKeeper, bookings) {
         }
     });
 }
+
+/**
+ * Get the messages from the server
+ * @param bookingId
+ * @returns {Promise<unknown>}
+ */
 function getMessages(bookingId) {
     console.log(bookingId);
     return new Promise((resolve, reject) => {
@@ -490,26 +537,28 @@ function getMessages(bookingId) {
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
-
                 reject(error);
             }
         });
     });
 }
 
+/**
+ * Display the contacts that pet owner has with the pet keepers
+ */
 function displayMessage() {
     fetchPetKeepers().then(petKeepers => {
-        getKeeperIdsFromBookings().then(keeperIdsFromBookings => {
+        getBookings().then(bookings => {
             let petKeepersList = $('#users_message');
             petKeepersList.empty();
-            const relevantKeeperIds = keeperIdsFromBookings.filter(booking => booking.owner_id === GlobalOwnerId).map(booking => booking.keeper_id);
+            const relevantKeeperIds = bookings.filter(booking => booking.owner_id === GlobalOwnerId).map(booking => booking.keeper_id);
             const filteredPetKeepers = petKeepers.filter(petKeeper => relevantKeeperIds.includes(petKeeper.keeper_id));
             if (filteredPetKeepers && filteredPetKeepers.length > 0) {
                 filteredPetKeepers.forEach(function(petKeeper) {
                     var petKeeperElement = $('<div class="person"> Name ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
 
                     petKeeperElement.click(function() {
-                        userMessage(petKeeper, keeperIdsFromBookings);
+                        userMessage(petKeeper, bookings);
                     });
                     petKeepersList.append(petKeeperElement);
                 });
@@ -593,18 +642,15 @@ function PostPet() {
         }
     };
 
-    // Prepare data for sending
     const formData = new FormData(formElement);
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
 
     getOwnerId(GlobalUsername).then(ownerId => {
         console.log('Owner ID:', ownerId);
-        // Use ownerId here
         data.pet_id = String(ownerId) + String(data.birthyear);
         data.owner_id = ownerId;
         console.log(data);
-        // Set up and send the request
         xhr.open('POST', 'GetPostPets?');
         xhr.setRequestHeader("Content-type", "application/json");
         xhr.send(JSON.stringify(data));
@@ -630,11 +676,9 @@ function getOwnerId(username) {
                 username: username
             },
             success: function(response) {
-                // Parse the response as JSON
                 const responseData = JSON.parse(response);
                 console.log('Received response:', responseData); // Log the parsed response
-                // Resolve the promise with the owner ID
-                if (responseData.ownerId) {
+                    if (responseData.ownerId) {
                     console.log('Owner ID:', responseData.ownerId);
                     resolve(responseData.ownerId);
                 } else {
@@ -643,7 +687,6 @@ function getOwnerId(username) {
                 }
             },
             error: function(error) {
-                // Reject the promise with the error
                 console.error('Error:', error);
                 reject(error);
             }
