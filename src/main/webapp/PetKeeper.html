@@ -16,8 +16,47 @@ and open the template in the editor.
 
         <div>
             <button class="buttons" id="editInfo">Edit Personal Information</button>
-            <button class="buttons" id="booking">Booking Management</button>
+<!--            <button class="buttons" id="booking">Booking Management</button>-->
             <button class="buttons" id="chatGPT">Ask ChatGpt</button>
+        </div>
+        <div id="booking_container">
+            <div id="booking">Available pet keepers
+                <br>
+                <div id="booking_context"></div>
+            </div>
+
+        </div>
+        <div id="change_info_container">
+            <h3>Update Pet Owner Info</h3>
+            <br>
+            <form id="changeInfo" name="changeInfo" onsubmit="event.preventDefault(); ChangeUserInfo();">
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password"><br>
+                <label for="firstname">First Name:</label><br>
+                <input type="text" id="firstname" name="firstname"><br>
+                <label for="lastname">Last Name:</label><br>
+                <input type="text" id="lastname" name="lastname"><br>
+                <label for="phone">Phone Number:</label><br>
+                <input type="text" id="phone" name="phone"><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div id="message_container">
+            <h3>Messages</h3>
+            <br>
+            <div id="users_message"></div>
+            <div id="msg_cont">
+                <br>
+                <button id="back">Back</button>
+                <br>
+                <div id="messages"></div>
+                <input type="text" id="text_area"><button id="sendButton">Send</button>
+            </div>
+        </div>
+        <div id="feedback_container">
+            <h3>Feedback</h3>
+            <br>
+            <div id="feedback"></div>
         </div>
 
 
