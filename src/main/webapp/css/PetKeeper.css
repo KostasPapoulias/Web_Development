@@ -43,16 +43,16 @@ body{
     border: solid 1px black;
     /* height: 40%; */
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
-    margin-bottom: 1%;
+    margin-top: 1%;
     margin-left: 40%;
     flex-wrap: wrap; /* Allow items to wrap as needed */
     align-items: flex-start; /* Align items at the start of the container */
     text-align: center;
     overflow: hidden;
     transition: min-height 1s ease-out, max-height 1s ease-out; /* Add min-height to the transition property */
-    max-height: 480px; /* Start in a collapsed state */
+    height: 44.5%;
 
 }
 
@@ -108,18 +108,38 @@ body{
     border: solid 1px black;
     /* height: 40%; */
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
-    margin-bottom: 1%;
+    margin-top: 1%;
     margin-right: 8%;
     flex-wrap: wrap; /* Allow items to wrap as needed */
     align-items: flex-start; /* Align items at the start of the container */
     text-align: center;
     overflow: hidden;
+    height: 44.5%
+
+
+}
+#feedback_container{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 35%;
+    border: solid 1px black;
+    /* height: 40%; */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 1%;
+    margin-left: 8%;
+    flex-wrap: wrap; /* Allow items to wrap as needed */
+    align-items: flex-start; /* Align items at the start of the container */
+    text-align: center;
+    overflow: hidden;
     transition: max-height 0.5s ease-out;
-    max-height: 2000px; /* Start in a collapsed state */
+    height: 30%
     /*display: flex;*/
     /*flex-direction: column;*/
-
 }
 
