@@ -65,6 +65,10 @@
         <servlet-name>GetPostMessages</servlet-name>
         <servlet-class>servlet.GetPostMessages</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PetKeeper</servlet-name>
+        <servlet-class>servlet.PetKeeper</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -128,6 +132,10 @@
     <servlet-mapping>
         <servlet-name>GetPostMessages</servlet-name>
         <url-pattern>/GetPostMessages</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PetKeeper</servlet-name>
+        <url-pattern>/PetKeeper</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

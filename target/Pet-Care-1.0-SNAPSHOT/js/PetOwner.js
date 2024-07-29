@@ -120,14 +120,15 @@ function displayPets(pets) {
     }
     return html;
 }
-/**
- * 
- * @param {*} GlobalOwnerId 
- * @returns 
- */
+
 // Declare a global array to store pets
 let petsArray = [];
 
+/**
+ * this function returns the pets that belongs to the petOwner
+ * @param GlobalOwnerId is the owner_id
+ * @returns {Promise<unknown>} an array with the pets
+ */
 function getPets(GlobalOwnerId) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -158,7 +159,9 @@ function getPets(GlobalOwnerId) {
 }
 
 /**
- * returns the type that petOwner has registered
+ * returns the type of pets that petOwner has registered
+ * @param pets an array with the pets
+ * @returns {string} "all", "catKeepers" or "dogKeepers"
  */
 function seePetType(pets) {
     let hasCats = false;
@@ -191,8 +194,13 @@ function seePetType(pets) {
     }
 }
 
+/**
+ * displays the pet keepers that are available for the petOwner
+ * @param petKeepers
+ */
 function displayPetKeepers(petKeepers) {
     var petKeepersList = $('#booking_context');
+
     petKeepersList.empty();
     console.log(petKeepers);
     console.log(unbookedPets);
@@ -328,6 +336,11 @@ function getPetKeepers(type) {
     });
 }
 let unbookedPets = [];
+
+/**
+ * Get pets with no booking
+ * @constructor
+ */
 function GetPetsWithNoBooking() {
     console.log("Attempting to retrieve pets with no booking for owner ID:", GlobalOwnerId);
 
@@ -356,6 +369,11 @@ function GetPetsWithNoBooking() {
     });
 }
 
+/**
+ * Get the pets list for the given owner ID
+ * @param GlobalOwnerId
+ * @returns {Promise<unknown>}
+ */
 function getPetsList(GlobalOwnerId) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -386,6 +404,10 @@ function getPetsList(GlobalOwnerId) {
     });
 }
 
+/**
+ * Get the bookings from the server
+ * @returns {Promise<unknown>}
+ */
 function getBookings() {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -404,6 +426,10 @@ function getBookings() {
     });
 }
 
+/**
+ * Fetch the pet keepers from the server
+ * @returns {Promise<unknown>}
+ */
 function fetchPetKeepers() {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -422,6 +448,11 @@ function fetchPetKeepers() {
     });
 }
 
+/**
+ * Display the messages between the pet owner and the pet keeper
+ * @param petKeeper
+ * @param bookings
+ */
 function userMessage(petKeeper, bookings) {
     const msg_cont = document.getElementById('msg_cont');
     const users_message = document.getElementById('users_message');
@@ -485,6 +516,12 @@ function userMessage(petKeeper, bookings) {
         }
     });
 }
+
+/**
+ * Get the messages from the server
+ * @param bookingId
+ * @returns {Promise<unknown>}
+ */
 function getMessages(bookingId) {
     console.log(bookingId);
     return new Promise((resolve, reject) => {
@@ -506,6 +543,9 @@ function getMessages(bookingId) {
     });
 }
 
+/**
+ * Display the contacts that pet owner has with the pet keepers
+ */
 function displayMessage() {
     fetchPetKeepers().then(petKeepers => {
         getBookings().then(bookings => {

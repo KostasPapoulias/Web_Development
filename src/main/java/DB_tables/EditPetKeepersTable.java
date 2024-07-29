@@ -67,6 +67,26 @@ public class EditPetKeepersTable {
         }
     }
 
+    public PetKeeper getPetKeeperByUsername(String username) {
+        PetKeeper petKeeper = null;
+        try {
+            Connection con = Connect.getConnection();
+            Statement stmt = con.createStatement();
+            String query = "SELECT * FROM petkeepers WHERE username = '" + username + "'";
+            ResultSet rs = stmt.executeQuery(query);
+
+            if (rs.next()) {
+                Gson gson = new Gson();
+                String json = Connect.getResultsToJSON(rs);
+                petKeeper = gson.fromJson(json, PetKeeper.class);
+            }
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+        return petKeeper;
+    }
+
     public PetKeeper databaseToPetKeepers(String username, String password) throws SQLException, ClassNotFoundException {
         Connection con = Connect.getConnection();
         Statement stmt = con.createStatement();
