@@ -44,6 +44,7 @@ function getOwner() {
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var username = document.getElementById('username').value;
+            console.log("Redirecting to PetOwner.html with username: " + username);
             window.location.href = 'PetOwner.html?username=' + encodeURIComponent(username);
         } else if (xhr.status !== 200) {
             $("#ajaxContent").html("User not exists or incorrect password");

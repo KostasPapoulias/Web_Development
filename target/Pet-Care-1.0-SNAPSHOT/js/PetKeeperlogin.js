@@ -37,16 +37,19 @@ document.getElementById('loginButton').addEventListener('click', function () {
 
 });
 
+
 function getKeeper() {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            window.location.href = 'PetKeeper.html';
+            var username = document.getElementById('username').value;
+            window.location.href = 'PetKeeper.html?username=' + encodeURIComponent(username);
         } else if (xhr.status !== 200) {
             $("#ajaxContent").html("User not exists or incorrect password");
         }
     };
     var data = $('#PetKeeperloginform').serialize();
+
     xhr.open('GET', 'GetKeeper?' + data);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send();

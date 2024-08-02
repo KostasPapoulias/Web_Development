@@ -67,6 +67,65 @@ public class EditPetKeepersTable {
         }
     }
 
+    public void updatePetKeeperData(String username, String password, String firstname, String lastname, String telephone, String city, String address, String property, String propertydescription, String catkeeper, String dogkeeper, String catprice, String dogprice) throws SQLException, ClassNotFoundException {
+        Connection con = Connect.getConnection();
+        Statement stmt = con.createStatement();
+
+        StringBuilder updateQuery = new StringBuilder("UPDATE petkeepers SET ");
+
+        if (password != null && !password.isEmpty()) {
+            updateQuery.append("password='").append(password).append("',");
+        }
+        if (firstname != null && !firstname.isEmpty()) {
+            updateQuery.append("firstname='").append(firstname).append("',");
+        }
+        if (lastname != null && !lastname.isEmpty()) {
+            updateQuery.append("lastname='").append(lastname).append("',");
+        }
+        if (telephone != null && !telephone.isEmpty()) {
+            updateQuery.append("telephone='").append(telephone).append("',");
+        }
+        if (city != null && !city.isEmpty()) {
+            updateQuery.append("city='").append(city).append("',");
+        }
+        if (address != null && !address.isEmpty()) {
+            updateQuery.append("address='").append(address).append("',");
+        }
+        if (property != null && !property.isEmpty()) {
+            updateQuery.append("property='").append(property).append("',");
+        }
+        if (propertydescription != null && !propertydescription.isEmpty()) {
+            updateQuery.append("propertydescription='").append(propertydescription).append("',");
+        }
+        if (catkeeper != null && !catkeeper.isEmpty()) {
+            updateQuery.append("catkeeper='").append(catkeeper).append("',");
+        }
+        if (dogkeeper != null && !dogkeeper.isEmpty()) {
+            updateQuery.append("dogkeeper='").append(dogkeeper).append("',");
+        }
+        if (catprice != null && !catprice.isEmpty()) {
+            updateQuery.append("catprice='").append(catprice).append("',");
+        }
+        if (dogprice != null && !dogprice.isEmpty()) {
+            updateQuery.append("dogprice='").append(dogprice).append("',");
+        }
+
+        // Remove the last comma
+        if (updateQuery.charAt(updateQuery.length() - 1) == ',') {
+            updateQuery.setLength(updateQuery.length() - 1);
+        }
+
+        updateQuery.append(" WHERE username = '").append(username).append("'");
+        System.out.println("UPDATE QUERY: " + updateQuery.toString());
+
+        try {
+            stmt.executeUpdate(updateQuery.toString());
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+    }
+
     public PetKeeper getPetKeeperByUsername(String username) {
         PetKeeper petKeeper = null;
         try {
