@@ -21,6 +21,7 @@ body{
     top: 0;
     left: 0;
     margin-left: 8%;
+    overflow-y: scroll;
 
 }
 #booking{

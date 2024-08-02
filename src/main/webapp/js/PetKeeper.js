@@ -35,6 +35,7 @@ window.onload = function() {
 
     getKeeperId(Username, function(KeeperId) {
         console.log("KeeperId is now available: " + KeeperId);
+        fetchAndDisplayBookings(KeeperId)
     });
 
     function updatePriceFields() {
@@ -75,7 +76,6 @@ window.onload = function() {
 
     // Initial call to set the correct visibility
     updatePriceFields();
-
 
 
 };
@@ -136,5 +136,74 @@ function ChangeUserInfo(){
     xhr.open('POST', 'PetKeeper?');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
+}
+// DOESN'T APPEAR FROM AND TO DATE???
+function fetchAndDisplayBookings(KeeperId) {
+    console.log(KeeperId);
+    $.ajax({
+        url: 'bookingIds',
+        type: 'GET',
+        success: function(data) {
+            console.log(data);
+            const bookings = data;
+            const filteredBookings = bookings.filter(booking => booking.keeper_id === KeeperId);
+            const bookingContext = document.getElementById('booking_context');
+            bookingContext.innerHTML = '';
+
+            if (filteredBookings.length > 0) {
+                filteredBookings.forEach(booking => {
+                    const bookingElement = document.createElement('div');
+                    bookingElement.innerHTML = `
+                        <p>Booking ID: ${booking.booking_id}</p>
+                        <p>Keeper ID: ${booking.keeper_id}</p>
+                        <p>Booking Date: ${booking.fromdate} - ${booking.todate}</p>
+                        <p>Booking Status: ${booking.status}</p>
+                        ${booking.status === 'requested' ? `
+                            <button onclick="handleAccept(${booking.booking_id})">Accept</button>
+                            <button onclick="handleReject(${booking.booking_id})">Reject</button>
+                        ` : ''}
+                        <hr>
+                    `;
+                    bookingContext.appendChild(bookingElement);
+                });
+            } else {
+                bookingContext.innerHTML = '<p>No bookings found for this keeper.</p>';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error: ' + xhr.responseText);
+            const bookingContext = document.getElementById('booking_context');
+            bookingContext.innerHTML = '<p style="color:red">Error fetching bookings.</p>';
+        }
+    });
+}
+
+function handleAccept(bookingId) {
+    updateBookingStatus(bookingId, 'accepted');
+}
+
+function handleReject(bookingId) {
+    updateBookingStatus(bookingId, 'rejected');
+}
+
+function updateBookingStatus(bookingId, status) {
+    console.log(bookingId + status)
+    $.ajax({
+        url: 'updateBookingStatus',
+        type: 'POST',
+        contentType: 'application/json',
+        data:
+            {
+                booking_id: bookingId,
+                status: status
+            },
+        success: function(response) {
+            console.log('Booking status updated successfully');
+            fetchAndDisplayBookings(KeeperId); // Refresh the bookings list
+        },
+        error: function(xhr, status, error) {
+            console.error('Error: ' + xhr.responseText);
+        }
+    });
 }
 

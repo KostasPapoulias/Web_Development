@@ -69,6 +69,10 @@
         <servlet-name>PetKeeper</servlet-name>
         <servlet-class>servlet.PetKeeper</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>updateBookingStatus</servlet-name>
+        <servlet-class>servlet.updateBookingStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -136,6 +140,10 @@
     <servlet-mapping>
         <servlet-name>PetKeeper</servlet-name>
         <url-pattern>/PetKeeper</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>updateBookingStatus</servlet-name>
+        <url-pattern>/updateBookingStatus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
