@@ -35,7 +35,9 @@ window.onload = function() {
 
     getKeeperId(Username, function(KeeperId) {
         console.log("KeeperId is now available: " + KeeperId);
-        fetchAndDisplayBookings(KeeperId)
+        fetchAndDisplayBookings(KeeperId);
+        fetchAndDisplayPetKeepers();
+
     });
 
     function updatePriceFields() {
@@ -59,6 +61,7 @@ window.onload = function() {
             document.getElementById('catkeeper').value = 'true';
             document.getElementById('dogkeeper').value = 'true';
         }
+
     }
 
     // Add event listeners to radio buttons
@@ -78,6 +81,11 @@ window.onload = function() {
     updatePriceFields();
 
 
+    document.getElementById('back').addEventListener('click', function() {
+        console.log('Back button clicked');
+        document.getElementById('users_message').style.display = 'block';
+        document.getElementById('msg_cont').style.display = 'none';
+    });
 };
 
 //      CHANGE INFO NOT SUCCESS, SUSPECT ISSUE RELATED TO FALSE REGISTRATION
@@ -187,23 +195,68 @@ function handleReject(bookingId) {
 }
 
 function updateBookingStatus(bookingId, status) {
-    console.log(bookingId + status)
+    console.log(bookingId + status);
     $.ajax({
-        url: 'updateBookingStatus',
+        url: 'UpdateBookingStatus',
         type: 'POST',
-        contentType: 'application/json',
-        data:
-            {
-                booking_id: bookingId,
-                status: status
-            },
+        contentType: 'application/x-www-form-urlencoded',
+        data: {
+            booking_id: bookingId,
+            status: status
+        },
         success: function(response) {
             console.log('Booking status updated successfully');
-            fetchAndDisplayBookings(KeeperId); // Refresh the bookings list
+            fetchAndDisplayBookings(KeeperId);
         },
         error: function(xhr, status, error) {
             console.error('Error: ' + xhr.responseText);
         }
     });
 }
+
+// Function to retrieve and display pet keepers
+function fetchAndDisplayPetKeepers() {
+    $.ajax({
+        url: 'GetAllAllPetKeepers',
+        type: 'GET',
+        success: function(data) {
+            const petKeepers = data;
+            const petKeeperContainer = document.getElementById('users_message');
+            petKeeperContainer.innerHTML = '';
+            petKeeperContainer.innerHTML = '<p>Pet Keepers</p>';
+
+            petKeepers.forEach(petKeeper => {
+                const petKeeperElement = document.createElement('div');
+
+                if (petKeeper.username !== Username) {
+
+                    petKeeperElement.innerHTML += `
+                        <p>Pet Keeper ID: ${petKeeper.keeper_id}</p>
+                        <p>Name: ${petKeeper.username}</p>
+                        <hr>
+                    `;
+                }
+                petKeeperElement.onclick = () => handlePetKeeperClick(petKeeper.username);
+
+                petKeeperContainer.appendChild(petKeeperElement);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error: ' + xhr.responseText);
+            const petKeeperContainer = document.getElementById('petKeeperContainer');
+            petKeeperContainer.innerHTML = '<p style="color:red">Error fetching pet keepers.</p>';
+        }
+    });
+}
+
+function handlePetKeeperClick(username) {
+    document.getElementById('users_message').style.display = 'none';
+    document.getElementById('msg_cont').style.display = 'block';
+    document.getElementById('msg_cont').innerHTML += `
+        <p>Send a message to ${username}</p>      
+    `;
+}
+
+
+
 
