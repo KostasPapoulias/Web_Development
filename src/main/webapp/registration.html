@@ -389,8 +389,8 @@
             <form id="form2">
 
                 <div>
-                    <label for="PetAccommodation">*Pet Accommodation: </label>
-                    <select id="PetAccommodation" name="Pet-Accommodation">
+                    <label for="property">*Pet Accommodation: </label>
+                    <select id="property" name="property">
                         <option value="Interior">Interior</option>
                         <option value="Exterior">Exterior</option>
                         <option value="Both">Both</option>
@@ -400,26 +400,26 @@
                 <div>
                     <label>
                         Hosting cat
-                        <input type="checkbox" name="pet" value="cat" class="hosting" id="cathosting">
+                        <input type="checkbox" name="pet" value="cat" class="hosting" id="catkeeper">
 
                     </label>
                     <label id="doglabel">
                         Hosting dog
-                        <input type="checkbox" name="pet" value="dog" class="hosting" id="doghosting">
+                        <input type="checkbox" name="pet" value="dog" class="hosting" id="dogkeeper">
                     </label>
                 </div>
 
                 <div id="priceForCat">
-                    <label for="priceForCatInput">*Price for cat (per night): </label>
-                    <input type="number" id="priceForCatInput" name="priceforcat" min="0" max="15" value="8">
+                    <label for="catprice">*Price for cat (per night): </label>
+                    <input type="number" id="catprice" name="catprice" min="0" max="15" value="8">
                 </div>
 
                 <div id="priceForDog">
-                    <label for="priceForDogInput">*Price for dog (per night): </label>
-                    <input type="number" id="priceForDogInput" name="pricefordog" min="0" max="20" value="10">
+                    <label for="dogprice">*Price for dog (per night): </label>
+                    <input type="number" id="dogprice" name="dogprice" min="0" max="20" value="10">
                 </div>
 
-                <div id="propertyDescription">
+                <div id="propertydescription">
                     <label for="propertytext">Property description:</label>
                     <textarea id="propertytext" rows="4" cols="50"></textarea>
                 </div>
