@@ -67,6 +67,35 @@ public class EditPetKeepersTable {
         }
     }
 
+    public void deletePetKeeperByUsername(String username) throws ClassNotFoundException {
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            con = Connect.getConnection();
+            stmt = con.createStatement();
+            String deleteQuery = "DELETE FROM petkeepers WHERE username = '" + username + "'";
+            stmt.executeUpdate(deleteQuery);
+            System.out.println("PetKeeper with username " + username + " was successfully deleted.");
+        } catch (SQLException ex) {
+            Logger.getLogger(EditPetKeepersTable.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditPetKeepersTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditPetKeepersTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
     public void updatePetKeeperData(String username, String password, String firstname, String lastname, String telephone, String city, String address, String property, String propertydescription, String catkeeper, String dogkeeper, String catprice, String dogprice) throws SQLException, ClassNotFoundException {
         Connection con = Connect.getConnection();
         Statement stmt = con.createStatement();

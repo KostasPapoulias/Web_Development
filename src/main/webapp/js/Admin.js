@@ -57,7 +57,7 @@ function displayData(data) {
             tableHTML += `<tr class="text">
                             <td>${item.username}</td>
                             <td>${item.firstname}</td>
-                            <td><button onclick="deleteUser(this, '${item.username}')">Delete</button></td>
+                            <td><button onclick='deleteUser(this, ${JSON.stringify(item)})'>Delete</button></td>
                           </tr>`;
         });
 
@@ -68,10 +68,14 @@ function displayData(data) {
     }
 }
 
-function deleteUser(button, username) {
-console.log(username);
+function deleteUser(button, user) {
+    console.log(user);
+    const url = user.keeper_id ? 'DeletePetKeeper' : 'DeletePetOwner';
+    console.log(url);
+    const username = user.username;
+    console.log(username);
     $.ajax({
-        url: 'DeletePetKeeper',
+        url: url,
         data: {
             username: username
         },
@@ -79,11 +83,17 @@ console.log(username);
         dataType: 'json',
         success: function (data) {
             console.log(data);
-            var row = button.parentNode.parentNode;
+            const row = button.parentNode.parentNode;
             row.parentNode.removeChild(row);
         },
         error: function (error) {
             console.error('Error deleting user:', error);
+            console.error('Error details:', {
+                readyState: error.readyState,
+                status: error.status,
+                statusText: error.statusText,
+                responseText: error.responseText
+            });
         }
     });
 }

@@ -217,6 +217,35 @@ public class EditPetOwnersTable {
         }
     }
 
+    public void deletePetOwnerByUsername(String username) throws ClassNotFoundException {
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            con = Connect.getConnection();
+            stmt = con.createStatement();
+            String deleteQuery = "DELETE FROM petowners WHERE username = '" + username + "'";
+            stmt.executeUpdate(deleteQuery);
+            System.out.println("PetOwner with username " + username + " was successfully deleted.");
+        } catch (SQLException ex) {
+            Logger.getLogger(EditPetOwnersTable.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditPetOwnersTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(EditPetOwnersTable.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
     public ArrayList<PetOwner> getAvailableOwners(String type) throws SQLException, ClassNotFoundException {
         Connection con = Connect.getConnection();
         Statement stmt = con.createStatement();
