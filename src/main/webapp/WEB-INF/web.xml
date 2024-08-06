@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <servlet>
-        <servlet-name>Registration</servlet-name>
-        <servlet-class>Registration</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ChatGPTAPIExample</servlet-name>
-        <servlet-class>ChatGPTAPIExample</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>GetKeepers</servlet-name>
-        <servlet-class>servlet.GetKeepers</servlet-class>
-    </servlet>
+
+<!--    <servlet>-->
+<!--        <servlet-name>ChatGPTAPIExample</servlet-name>-->
+<!--        <servlet-class>ChatGPTAPIExample</servlet-class>-->
+<!--    </servlet>-->
+
     <servlet>
         <servlet-name>ChatGPTAPI</servlet-name>
         <servlet-class>ChatClasses.ChatGPTAPI</servlet-class>
@@ -73,18 +67,26 @@
         <servlet-name>UpdateBookingStatus</servlet-name>
         <servlet-class>servlet.UpdateBookingStatus</servlet-class>
     </servlet>
+
+
     <servlet>
         <servlet-name>Reviews</servlet-name>
         <servlet-class>servlet.Reviews</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Registration</servlet-name>
-        <url-pattern>/Registration</url-pattern>
+        <servlet-name>Reviews</servlet-name>
+        <url-pattern>/Reviews</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeletePetKeeper</servlet-name>
+        <servlet-class>servlet.DeletePetKeeper</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>GetKeepers</servlet-name>
-        <url-pattern>/GetKeepers</url-pattern>
+        <servlet-name>DeletePetKeeper</servlet-name>
+        <url-pattern>/DeletePetKeeper</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>ChatGPTAPI</servlet-name>
         <url-pattern>/ChatGPTAPI</url-pattern>
@@ -148,10 +150,6 @@
     <servlet-mapping>
         <servlet-name>UpdateBookingStatus</servlet-name>
         <url-pattern>/UpdateBookingStatus</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Reviews</servlet-name>
-        <url-pattern>/Reviews</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

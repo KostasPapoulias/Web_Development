@@ -41,18 +41,65 @@ function createTableFromJSON(data) {
 
 }
 
+function displayData(data) {
+    var context = document.getElementById('context');
+    context.innerHTML = ''; // Clear previous content
 
+    if (data && data.length > 0) {
+        let tableHTML = `<table id="table">
+                            <tr class="text">
+                                <th>Username</th>
+                                <th>First Name</th>
+                                <th>Action</th>
+                            </tr>`;
+
+        data.forEach(function (item) {
+            tableHTML += `<tr class="text">
+                            <td>${item.username}</td>
+                            <td>${item.firstname}</td>
+                            <td><button onclick="deleteUser(this, '${item.username}')">Delete</button></td>
+                          </tr>`;
+        });
+
+        tableHTML += '</table>';
+        context.innerHTML = tableHTML;
+    } else {
+        context.innerHTML = '<p>No data found.</p>';
+    }
+}
+
+function deleteUser(button, username) {
+console.log(username);
+    $.ajax({
+        url: 'DeletePetKeeper',
+        data: {
+            username: username
+        },
+        type: 'POST',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            var row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        },
+        error: function (error) {
+            console.error('Error deleting user:', error);
+        }
+    });
+}
 
 
 function getAllKeepers() {
     // Make an AJAX request to fetch pet keepers
     $.ajax({
-        url: 'GetAllPetKeepers?', // Replace with the actual URL to your servlet
+        url: 'GetAllAllPetKeepers?', // Replace with the actual URL to your servlet
         type: 'GET',
         dataType: 'json',
         success: function (data) {
             // Process the received data
-            displayPetKeepers(data);
+            console.log(data);
+            // displayPetKeepers(data);
+            displayData(data)
         },
         error: function (error) {
             console.error('Error fetching pet keepers:', error);
@@ -98,7 +145,8 @@ function getAllOwners() {
         dataType: 'json',
         success: function (data) {
             // Process the received data
-            displayPetKeepers(data);
+            // displayPetKeepers(data);
+            displayData(data)
         },
         error: function (error) {
             console.error('Error fetching pet keepers:', error);
