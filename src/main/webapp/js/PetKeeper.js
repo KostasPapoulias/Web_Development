@@ -37,7 +37,7 @@ window.onload = function() {
         console.log("KeeperId is now available: " + KeeperId);
         fetchAndDisplayBookings(KeeperId);
         displayMessage();
-
+        displayReviews();
     });
 
     function updatePriceFields() {
@@ -212,6 +212,43 @@ function updateBookingStatus(bookingId, status) {
             console.error('Error: ' + xhr.responseText);
         }
     });
+}
+
+function displayReviews(){
+    $.ajax({
+        url: 'Reviews',
+        type: 'GET',
+        data:{
+            keeper_id: KeeperId
+        },
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            const reviews = data;
+            const reviewContext = document.getElementById('feedback');
+            reviewContext.innerHTML = '';
+
+            if (reviews.length > 0) {
+                reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.innerHTML = `
+                        <p>Review ID: ${review.review_id}</p>
+                        <p>Owner ID: ${review.owner_id}</p>
+                        <p>Rating: ${review.reviewScore}</p>
+                        <p>Review: ${review.reviewText}</p>
+                        <hr>
+                    `;
+                    reviewContext.appendChild(reviewElement);
+                });
+            } else {
+                reviewContext.innerHTML = '<p>No reviews found for this keeper.</p>';
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error: ' + xhr.responseText);
+
+        }
+    })
 }
 
 function getBookings() {

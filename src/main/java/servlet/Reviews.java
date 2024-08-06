@@ -13,7 +13,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet("/Reviews")
+//@WebServlet("/Reviews")
 public class Reviews extends HttpServlet {
 
     private EditReviewsTable editReviewsTable = new EditReviewsTable();
