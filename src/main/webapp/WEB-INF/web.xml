@@ -73,6 +73,10 @@
         <servlet-name>UpdateBookingStatus</servlet-name>
         <servlet-class>servlet.UpdateBookingStatus</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Reviews</servlet-name>
+        <servlet-class>servlet.Reviews</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
         <url-pattern>/Registration</url-pattern>
@@ -144,6 +148,10 @@
     <servlet-mapping>
         <servlet-name>UpdateBookingStatus</servlet-name>
         <url-pattern>/UpdateBookingStatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Reviews</servlet-name>
+        <url-pattern>/Reviews</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
