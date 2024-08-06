@@ -63,7 +63,7 @@ public class GetPostMessages extends HttpServlet {
             return;
         }
 
-        Gson gson = new Gson();
+         Gson gson = new Gson();
         String messagesJson = gson.toJson(messages);
 
         response.setContentType("application/json");
