@@ -1,3 +1,5 @@
+//TODO add finish button to the reservations
+// add a piggy bank for the earned money? (read from the finished booking)
 console.log("PetKeeper.js is loaded");
 let params = new URLSearchParams(window.location.search);
 let KeeperId;
