@@ -1,3 +1,4 @@
+//TODO implement the statistics
 var context = document.getElementById("context");
 
 document.getElementById('petKeepers').addEventListener('click', doPetKeepers);
