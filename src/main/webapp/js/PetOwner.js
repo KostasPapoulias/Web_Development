@@ -1,3 +1,4 @@
+//TODO after book is finished leave a review
 let params = new URLSearchParams(window.location.search);
 const GlobalUsername = params.get('username');
 let GlobalOwnerId ;
