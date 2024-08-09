@@ -174,70 +174,117 @@ body{
 
 }
 
-#change_info_container{
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 18%;
-    border: solid 1px black;
-    /* height: 40%; */
+/*#change_info_container{*/
+/*    background-color: white;*/
+/*    padding: 20px;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*    width: 18%;*/
+/*    border: solid 1px black;*/
+/*    !* height: 40%; *!*/
+/*    position: absolute;*/
+/*    bottom: 0;*/
+/*    right: 0;*/
+/*    margin-bottom: 1%;*/
+/*    margin-right: 8%;*/
+/*    flex-wrap: wrap; !* Allow items to wrap as needed *!*/
+/*    align-items: flex-start; !* Align items at the start of the container *!*/
+/*    text-align: center;*/
+/*    overflow: hidden;*/
+/*    transition: max-height 0.5s ease-out;*/
+/*    max-height: 55px; !* Start in a collapsed state *!*/
+/*    !*display: flex;*!*/
+/*    !*flex-direction: column;*!*/
+
+/*}*/
+.right{
     position: absolute;
-    bottom: 0;
-    right: 0;
-    margin-bottom: 1%;
-    margin-right: 8%;
-    flex-wrap: wrap; /* Allow items to wrap as needed */
-    align-items: flex-start; /* Align items at the start of the container */
-    text-align: center;
-    overflow: hidden;
-    transition: max-height 0.5s ease-out;
-    max-height: 55px; /* Start in a collapsed state */
-    /*display: flex;*/
-    /*flex-direction: column;*/
-
-}
-
-
-#change_info_container.expanded, #newPet_container.expanded {
-    transition: max-height 0.5s ease-out;
-    max-height: 2000px; /* Large enough to show the whole content when expanded */
-}
-
-#newPet_container{
-    
-    background-color: white;
-    padding: 5px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 20%;
-    border: solid 1px black;
-    height: auto;
-    position: absolute;
+    right: 125px;
     top: 0;
-    right: 0;
-    margin-top: 1%;
-    margin-right: 8%;
-    align-items: flex-start; /* Align items at the start of the container */
-    text-align: center;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+}
+.component {
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    position: relative;
+    background-color: #f9f9f9;
     overflow: hidden;
-    transition: max-height 0.5s ease-out;
-    max-height: 2000px; /* Large enough to show the whole content when expanded */
+    transition: all 0.3s ease;
+
 }
 
-#newPet_container.collapsed {
-    transition: max-height 0.5s ease-out;
-    max-height: 55px; /* Adjust based on the header size */
+.header {
+    padding: 15px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    user-select: none;
 }
-#feedback_container{
+
+.content {
+    max-height: 0;
+    overflow: hidden;
     background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 50%;
-    border: solid 1px black;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 15px;
 
 }
+.component.open .content {
+    max-height: 500px;
+    padding: 15px;
+}
+.component:not(.open) .content {
+    padding: 0 15px;
+}
+
+/*#change_info_container.expanded, #newPet_container.expanded {*/
+/*    transition: max-height 0.5s ease-out;*/
+/*    max-height: 2000px; !* Large enough to show the whole content when expanded *!*/
+/*}*/
+
+/*#newPet_container{*/
+/*    */
+/*    background-color: white;*/
+/*    padding: 5px;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*    width: 20%;*/
+/*    border: solid 1px black;*/
+/*    height: auto;*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    margin-top: 1%;*/
+/*    margin-right: 8%;*/
+/*    align-items: flex-start; !* Align items at the start of the container *!*/
+/*    text-align: center;*/
+/*    overflow: hidden;*/
+/*    transition: max-height 0.5s ease-out;*/
+/*    max-height: 2000px; !* Large enough to show the whole content when expanded *!*/
+/*}*/
+
+/*#newPet_container.collapsed {*/
+/*    transition: max-height 0.5s ease-out;*/
+/*    max-height: 55px; !* Adjust based on the header size *!*/
+/*}*/
+/*#feedback_container{*/
+/*    background-color: white;*/
+/*    padding: 20px;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*    width: 50%;*/
+/*    border: solid 1px black;*/
+
+/*}*/
 
 #th, td{
     background-color: bisque;

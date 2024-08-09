@@ -48,46 +48,59 @@ and open the template in the editor.
             <br>
             <div id="pets"></div>
         </div>
-        <div id="change_info_container">
-            <h3>Update Pet Owner Info</h3>
-            <br>
-                <form id="changeInfo" name="changeInfo" onsubmit="event.preventDefault(); ChangeUserInfo();">
-                    <label for="password">Password:</label><br>
-                    <input type="password" id="password" name="password"><br>
-                    <label for="firstname">First Name:</label><br>
-                    <input type="text" id="firstname" name="firstname"><br>
-                    <label for="lastname">Last Name:</label><br>
-                    <input type="text" id="lastname" name="lastname"><br>
-                    <label for="phone">Phone Number:</label><br>
-                    <input type="text" id="phone" name="phone"><br>
-                    <input type="submit" value="Submit">
-                </form>
+
+        <div class="right">
+            <div class="component">
+                <div class="header">Update Pet Owner Info</div>
+                <div class="content" id="change_info_container">
+
+                    <br>
+                    <form id="changeInfo" name="changeInfo" onsubmit="event.preventDefault(); ChangeUserInfo();">
+                        <label for="password">Password:</label><br>
+                        <input type="password" id="password" name="password"><br>
+                        <label for="firstname">First Name:</label><br>
+                        <input type="text" id="firstname" name="firstname"><br>
+                        <label for="lastname">Last Name:</label><br>
+                        <input type="text" id="lastname" name="lastname"><br>
+                        <label for="phone">Phone Number:</label><br>
+                        <input type="text" id="phone" name="phone"><br>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
             </div>
-
-        <div id="newPet_container">
-            <h3>Register New Pet</h3>
-            <br>
-                <form id="petForm" name="petForm" onsubmit="event.preventDefault(); PostPet();">
-                    <label for="name">Pet Name:</label><br>
-                    <input type="text" id="name" name="name"><br>
-                    <label for="type">Pet Type:</label><br>
-                    <input type="text" id="type" name="type"><br>
-                    <label for="breed">Pet Breed:</label><br>
-                    <input type="text" id="breed" name="breed"><br>
-                    <label for="gender">Pet Gender:</label><br>
-                    <input type="text" id="gender" name="gender"><br>
-                    <label for="birthyear">Pet Age:</label><br>
-                    <input type="text" id="birthyear" name="birthyear"><br>
-                    <label for="weight">Pet Weight:</label><br>
-                    <input type="text" id="weight" name="weight"><br>
-                    <label for="description">Pet Description:</label><br>
-                    <input type="text" id="description" name="description"><br>
-                    <label for="photo">Pet Photo:</label><br>
-                    <input type="text" id="photo" name="photo"><br>
-                    <input type="submit" value="Submit">
-                </form>
+            <div class="component">
+                <div class="header">Register New Pet</div>
+                <div class="content" id="newPet_container">
+                    <br>
+                    <form id="petForm" name="petForm" onsubmit="event.preventDefault(); PostPet();">
+                        <label for="name">Pet Name:</label><br>
+                        <input type="text" id="name" name="name"><br>
+                        <label for="type">Pet Type:</label><br>
+                        <input type="text" id="type" name="type"><br>
+                        <label for="breed">Pet Breed:</label><br>
+                        <input type="text" id="breed" name="breed"><br>
+                        <label for="gender">Pet Gender:</label><br>
+                        <input type="text" id="gender" name="gender"><br>
+                        <label for="birthyear">Pet Age:</label><br>
+                        <input type="text" id="birthyear" name="birthyear"><br>
+                        <label for="weight">Pet Weight:</label><br>
+                        <input type="text" id="weight" name="weight"><br>
+                        <label for="description">Pet Description:</label><br>
+                        <input type="text" id="description" name="description"><br>
+                        <label for="photo">Pet Photo:</label><br>
+                        <input type="text" id="photo" name="photo"><br>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+            <div class="component">
+                <div class="header">Review</div>
+                <div class="content" id="feedback_container">
+                    <br>
+                    <div id="feedback"></div>
+                </div>
+            </div>
         </div>
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="js/PetOwner.js"></script>
     </body>

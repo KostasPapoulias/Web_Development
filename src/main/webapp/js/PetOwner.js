@@ -36,6 +36,37 @@ function retrieveData() {
 
 
 //CONTROLLERS
+document.addEventListener('DOMContentLoaded', function() {
+    const components = document.querySelectorAll('.component');
+
+    components.forEach(component => {
+        const header = component.querySelector('.header');
+        const content = component.querySelector('.content');
+
+        header.addEventListener('click', function() {
+            const isOpen = component.classList.contains('open');
+
+            components.forEach(comp => {
+                const compContent = comp.querySelector('.content');
+                comp.classList.remove('open');
+                compContent.style.maxHeight = null;
+                compContent.style.paddingTop = 0;
+                compContent.style.paddingBottom = 0;
+            });
+
+            if (!isOpen) {
+                component.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.paddingTop = "15px";
+                content.style.paddingBottom = "15px";
+            }
+        });
+    });
+});
+
+
+
+
 document.getElementById("booking").addEventListener('click', switchToBooking);
 document.getElementById("booked").addEventListener('click', switchToBooked);
 function switchToBooking() {
@@ -46,35 +77,35 @@ function switchToBooked() {
     document.getElementById("booking_context").style.display = "none";
     document.getElementById("booked_context").style.display = "block";
 }
-document.addEventListener('DOMContentLoaded', function() {
-    const changeInfoHeader = document.querySelector('#change_info_container > h3');
-    const newPetHeader = document.querySelector('#newPet_container > h3');
-    const changeInfoContainer = document.getElementById('change_info_container');
-    const newPetContainer = document.getElementById('newPet_container');
-
-    changeInfoHeader.addEventListener('click', function() {
-        if (!newPetContainer.classList.contains('collapsed')) {
-            newPetContainer.classList.toggle('collapsed');
-            setTimeout(() => {
-                changeInfoContainer.classList.toggle('expanded');
-            }, 300); 
-        } else {
-            changeInfoContainer.classList.toggle('expanded');
-        }
-        
-    });
-
-    newPetHeader.addEventListener('click', function() {
-        if (changeInfoContainer.classList.contains('expanded')) {
-            changeInfoContainer.classList.remove('expanded');
-            setTimeout(() => {
-                newPetContainer.classList.toggle('collapsed');
-            }, 300); 
-        } else {
-            newPetContainer.classList.toggle('collapsed');
-        }
-    });
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     const changeInfoHeader = document.querySelector('#change_info_container > h3');
+//     const newPetHeader = document.querySelector('#newPet_container > h3');
+//     const changeInfoContainer = document.getElementById('change_info_container');
+//     const newPetContainer = document.getElementById('newPet_container');
+//
+//     changeInfoHeader.addEventListener('click', function() {
+//         if (!newPetContainer.classList.contains('collapsed')) {
+//             newPetContainer.classList.toggle('collapsed');
+//             setTimeout(() => {
+//                 changeInfoContainer.classList.toggle('expanded');
+//             }, 300);
+//         } else {
+//             changeInfoContainer.classList.toggle('expanded');
+//         }
+//
+//     });
+//
+//     newPetHeader.addEventListener('click', function() {
+//         if (changeInfoContainer.classList.contains('expanded')) {
+//             changeInfoContainer.classList.remove('expanded');
+//             setTimeout(() => {
+//                 newPetContainer.classList.toggle('collapsed');
+//             }, 300);
+//         } else {
+//             newPetContainer.classList.toggle('collapsed');
+//         }
+//     });
+// });
 document.addEventListener('DOMContentLoaded', function() {
     const messageHeader = document.querySelector('#message_container > h3'); 
     const messageContainer = document.getElementById('message_container');
