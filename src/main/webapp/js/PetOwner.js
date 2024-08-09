@@ -23,6 +23,7 @@ function retrieveData() {
     getOwnerId(GlobalUsername).then(ownerId => {
         console.log('Owner ID:', ownerId);
         GlobalOwnerId = ownerId;
+        giveReview(ownerId);
         getPets(GlobalOwnerId).then(type => {
             console.log('Type:', type);
             getPetKeepers(type);
@@ -137,10 +138,78 @@ function createTableFromJSON(data) {
     return html;
 
 }
+
+function giveReview(ownerId){
+console.log("here")
+    $.ajax({
+        url: 'bookingIds',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data)
+            let ownerBookings = data.filter(item => item.owner_id === ownerId && item.status === 'finished');
+            console.log(ownerBookings)
+            if(ownerBookings.length > 0)
+                sendReview(ownerBookings);
+            else{
+                $('#feedback').html("No bookings to review");
+            }
+        },
+        error: function(error) {
+            console.error('Error fetching keeper IDs:', error);
+            reject(error);
+        }
+    });
+
+}
+function sendReview(bookings){
+    const feedbackContainer = $('#feedback');
+    feedbackContainer.empty();
+
+    bookings.forEach(booking => {
+        const form = $('<form class="feedback-form"></form>');
+        form.append('<h4>Review for booking ID: ' + booking.booking_id + '</h4>');
+        form.append('<label for="reviewScore">Rating:</label><br>');
+        form.append('<input type="number" id="reviewScore" name="reviewScore" min="1" max="5"><br>');
+        form.append('<label for="reviewText">Comments:</label><br>');
+        form.append('<textarea id="reviewText" name="reviewText"></textarea><br>');
+        form.append('<input type="submit" value="Submit">');
+
+        form.on('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form[0]);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            data.keeper_id = booking.keeper_id;
+            data.owner_id = booking.owner_id;
+
+            console.log(data)
+
+            $.ajax({
+                url: 'Reviews',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    console.log('Review submitted successfully:', response);
+                    form.remove();
+                },
+                error: function(error) {
+                    console.error('Error submitting review:', error);
+                }
+            });
+        });
+
+        feedbackContainer.append(form);
+    });
+}
+
 /**
  * displays pet owner's registered pets
- * @param {*} pets 
- * @returns 
+ * @param {*} pets
+ * @returns
  */
 function displayPets(pets) {
     var html = '';
