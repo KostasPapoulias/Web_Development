@@ -240,15 +240,38 @@ function displayPetKeepers(petKeepers) {
  */
 function makeBooking(petKeeper, pet) {
     var form = $('<form id="form"></form>');
-    form.append('<label for="price">Price:</label><br>');
-    form.append('<input type="text" id="price" name="price" value="' + petKeeper.dogprice + '" readonly><br>'); // You'll need to set the price
-    form.append('<label for="from">From:</label><br>');
-    form.append('<input type="date" id="fromDate" name="fromDate"><br>');
-    form.append('<label for="to">To:</label><br>');
+
+    // Append PetKeeper and Pet Name
+    form.append('<div>PetKeeper: ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
+    form.append('<div>Pet: ' + pet.name + '</div>');
+
+    form.append('<label for="priceDay">Price per day:</label><br>');
+    form.append('<input type="text" id="priceDay" name="priceDay" readonly><br>');
+    form.append('<label for="from">From:</label>');
+    form.append('<input type="date" id="fromDate" name="fromDate">');
+    form.append('<label for="to">To:</label>');
     form.append('<input type="date" id="toDate" name="toDate"><br>');
+    form.append('<label for="price">Total price:</label><br>');
+    form.append('<input type="text" id="price" name="price" readonly><br>');
     form.append('<input type="submit" value="Submit">');
 
     $('#formBook').append(form);
+
+    $('#priceDay').val(pet.type ==='dog' ? petKeeper.dogprice : petKeeper.catprice);
+
+    // Event listener to calculate duration and price
+    form.on('change', '#toDate, #fromDate', function() {
+        var fromDate = new Date($('#fromDate').val());
+        var toDate = new Date($('#toDate').val());
+        if (fromDate && toDate && toDate > fromDate) {
+            var duration = (toDate - fromDate) / (1000 * 60 * 60 * 24);
+            var pricePerDay = pet.type === 'dog' ? petKeeper.dogprice : petKeeper.catprice;
+            var totalPrice = duration * pricePerDay;
+            $('#price').val(totalPrice);
+        } else {
+            $('#price').val('');
+        }
+    });
 
     form.on('submit', function(e) {
         e.preventDefault();
@@ -264,7 +287,7 @@ function makeBooking(petKeeper, pet) {
         });
         data.owner_id = GlobalOwnerId;
         data.keeper_id = petKeeper.keeper_id;
-        data.status = "requested"
+        data.status = "requested";
         data.pet_id = pet.pet_id.toString();
         console.log(data);
 
