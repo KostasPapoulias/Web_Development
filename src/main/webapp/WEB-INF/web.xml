@@ -96,6 +96,15 @@
         <url-pattern>/DeletePetOwner</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>getAllPets</servlet-name>
+        <servlet-class>servlet.getAllPets</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>getAllPets</servlet-name>
+        <url-pattern>/getAllPets</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>ChatGPTAPI</servlet-name>
         <url-pattern>/ChatGPTAPI</url-pattern>

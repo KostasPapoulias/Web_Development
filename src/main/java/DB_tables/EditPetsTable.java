@@ -57,6 +57,35 @@ public class EditPetsTable {
         return null;
     }
 
+    public ArrayList<Pet> getAllPets() throws SQLException, ClassNotFoundException {
+        Connection con = Connect.getConnection();
+        Statement stmt = con.createStatement();
+        ArrayList<Pet> pets = new ArrayList<>();
+        ResultSet rs = null;
+        try {
+            rs = stmt.executeQuery("SELECT * FROM pets");
+            while (rs.next()) {
+                String json = Connect.getResultsToJSON(rs);
+                Gson gson = new Gson();
+                Pet pet = gson.fromJson(json, Pet.class);
+                pets.add(pet);
+            }
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return pets;
+    }
 
     public Pet petOfOwner(String id) throws SQLException, ClassNotFoundException {
         Connection con = DB_Connection.Connect.getConnection();
