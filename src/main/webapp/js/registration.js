@@ -107,7 +107,7 @@ function  doRegister(){
 //    }else{
 //        alert("password is weak!");
 //    }
-    
+
 
 }
 
@@ -116,12 +116,12 @@ function makeRequireTrue(){
         if(input.id != "job" && input.id != "personalpage" && input.id != "telephone"){
             input.required = true;
         }
-        
+
     });
 }
 
 function makeRequirefalse(){
-    
+
     inputElements.forEach(function (input) {
         input.required = false;
     });
@@ -140,22 +140,22 @@ function isStrongPassword(){
             break;
         }
     }
-    
+
     var numbers = password.replace(/[^0-9]/g, '');
     if (numbers.length >= password.length / 2) {
         isWeak = true;
     }
-    
+
     var hasSymbol = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,./]/.test(password);
     var hasUppercase = /[A-Z]/.test(password);
     var hasLowercase = /[a-z]/.test(password);
-                
+
     if (hasSymbol && hasUppercase && hasLowercase && numbers) {
         isStrong = true;
     }
 
     strengthMessage.style.fontSize = "22px";
-    
+
 
     if (isWeak) {
         strengthMessage.textContent = "Weak password!";
@@ -243,17 +243,17 @@ async function checkAddress(){
 
         if (Object.keys(response.data).length === 0) {
             displaymessage.textContent = "Location didn't found!";
-        } else {  
+        } else {
             displaymessage.textContent = "";
             parseData = response.data[0];
-            
+
 
             openMap();
             checkHeraklion();
 
         }
 
-        
+
     } catch (error) {
         console.error(error);
     }
@@ -281,7 +281,7 @@ function openMap(){
         map.addLayer(new OpenLayers.Layer.OSM());
 
         var lonLat = new OpenLayers.LonLat( parseData.lon,parseData.lat).transform(new OpenLayers.Projection("EPSG:4326"),
-        map.getProjectionObject());
+            map.getProjectionObject());
 
         var zoom = 10;
 
@@ -292,9 +292,9 @@ function openMap(){
 
         map.setCenter(lonLat, zoom);
     } else {
-        
+
         var newLonLat = new OpenLayers.LonLat( parseData.lon,parseData.lat).transform(new OpenLayers.Projection("EPSG:4326"),
-        map.getProjectionObject());
+            map.getProjectionObject());
 
         var newmarkers = new OpenLayers.Layer.Markers("Markers");
         map.addLayer(newmarkers);
@@ -332,7 +332,6 @@ function PostUser() {
             formData.append(key, value);
         });
 
-        // Append formData2 to combinedFormData
         formData2.forEach((value, key) => {
             formData.append(key, value);
         });
@@ -343,16 +342,37 @@ function PostUser() {
         });
     }
 
+    const data = {};
+    formData.forEach((value, key) => {
+        data[key] = value;
+    });
+
+    if (data.catkeeper === "false") {
+        data.catprice = 0;
+    }
+    if (data.dogkeeper === "false") {
+        data.dogprice = 0;
+    }
+    if (data.catprice) {
+        data.catprice = parseInt(data.catprice, 10);
+    }
+    if (data.dogprice) {
+        data.dogprice = parseInt(data.dogprice, 10);
+    }
+    console.log("Data to send:", data);
     const xhr = new XMLHttpRequest();
 
-    // Event handler for the response
     xhr.onload = function () {
         const ajaxContent = $('#ajaxContent');
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                const responseData = JSON.parse(xhr.responseText);
-                ajaxContent.html("Successful Registration. Now please log in!<br> Your Data");
-                ajaxContent.append(createTableFromJSON(responseData));
+                try {
+                    const responseData = JSON.parse(xhr.responseText);
+                    console.log("Server response:", responseData);
+
+                } catch (e) {
+                    ajaxContent.html('Error parsing response: ' + e.message + "<br>");
+                }
             } else {
                 ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
                 try {
@@ -363,18 +383,12 @@ function PostUser() {
                         }
                     }
                 } catch (e) {
-                    ajaxContent.append(`<p style='color:red'>Error parsing response: ${xhr.responseText}</p>`);
+                    ajaxContent.append(`<p style='color:red'>Error parsing response: ${e.message}</p>`);
                 }
             }
         }
     };
 
-    // Prepare data for sending
-    const data = {};
-    formData.forEach((value, key) => (data[key] = value));
-
-
-    // Set up and send the request
     xhr.open('POST', 'Register?');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));

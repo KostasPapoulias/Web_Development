@@ -3,14 +3,11 @@
     <head>
         <title>Registration form</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="keywords" content="registration">
-        <meta name="author" content="Leshi Shkelzen">
-
+        <meta name="author" content="Konstantinos Papoulias">
         <link rel="stylesheet" href="css/registration.css">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
     </head>
     <body id="body">
 
@@ -25,7 +22,7 @@
 
                 <div>
                     <label for="username"> *Username: </label>
-                    <input type="text" id="username"  name="username" placeholder="Username" pattern="^[^0-9][a-zA-Z0-9]{7,}" required>
+                    <input type="text" id="username" name="username" placeholder="Username" pattern="^[^0-9][a-zA-Z0-9]{7,}" required>
                 </div>
 
                 <div>
@@ -389,45 +386,43 @@
             <form id="form2">
 
                 <div>
-                    <label for="property">*Pet Accommodation: </label>
-                    <select id="property" name="property">
+                    <label for="PetAccommodation">*Pet Accommodation: </label>
+                    <select id="PetAccommodation" name="property">
                         <option value="Interior">Interior</option>
                         <option value="Exterior">Exterior</option>
                         <option value="Both">Both</option>
                     </select>
                 </div>
-
+                <input type="hidden" name="catkeeper" value="false">
+                <input type="hidden" name="dogkeeper" value="false">
                 <div>
                     <label>
                         Hosting cat
-                        <input type="checkbox" name="pet" value="cat" class="hosting" id="catkeeper">
+                        <input type="checkbox" name="catkeeper" value="true" class="hosting" id="cathosting">
 
                     </label>
                     <label id="doglabel">
                         Hosting dog
-                        <input type="checkbox" name="pet" value="dog" class="hosting" id="dogkeeper">
+                        <input type="checkbox" name="dogkeeper" value="true" class="hosting" id="doghosting">
                     </label>
                 </div>
 
                 <div id="priceForCat">
-                    <label for="catprice">*Price for cat (per night): </label>
-                    <input type="number" id="catprice" name="catprice" min="0" max="15" value="8">
+                    <label for="priceForCatInput">*Price for cat (per night): </label>
+                    <input type="number" id="priceForCatInput" name="catprice" min="0" max="15" value="8">
                 </div>
 
                 <div id="priceForDog">
-                    <label for="dogprice">*Price for dog (per night): </label>
-                    <input type="number" id="dogprice" name="dogprice" min="0" max="20" value="10">
+                    <label for="priceForDogInput">*Price for dog (per night): </label>
+                    <input type="number" id="priceForDogInput" name="dogprice" min="0" max="20" value="10">
                 </div>
 
-                <div id="propertydescription">
+                <div id="propertyDescription">
                     <label for="propertytext">Property description:</label>
-                    <textarea id="propertytext" rows="4" cols="50"></textarea>
+                    <textarea id="propertytext"  name="propertydescription" rows="4" cols="50"></textarea>
                 </div>
-
 
             </form>
-
-
 
         </div>
 

@@ -58,7 +58,7 @@ public class Register extends HttpServlet {
                     out.println("{ \"status\": \"error\", \"message\": \"Internal Server Error.\" }");
                 }
 
-            } else if (jsonString.contains("Keeper")) {
+            } else {
                 newPetKeeper = gson.fromJson(jsonString, PetKeeper.class);
 
                 EditPetKeepersTable eut = new EditPetKeepersTable();

@@ -330,13 +330,9 @@ public class EditPetKeepersTable {
     public void addNewPetKeeper(PetKeeper user) throws ClassNotFoundException {
         try {
             Connection con = Connect.getConnection();
-
             Statement stmt = con.createStatement();
 
-            String insertQuery = "INSERT INTO "
-                    + " petkeepers (username,email,password,firstname,lastname,birthdate,gender,country,city,address,personalpage,"
-                    + "job,telephone,lat,lon,property,propertydescription,catkeeper,dogkeeper,catprice,dogprice)"
-                    + " VALUES ("
+            String insertQuery = "INSERT INTO petkeepers (username, email, password, firstname, lastname, birthdate, gender, country, city, address, personalpage, job, telephone, lat, lon, property, propertydescription, catkeeper, dogkeeper, catprice, dogprice) VALUES ("
                     + "'" + user.getUsername() + "',"
                     + "'" + user.getEmail() + "',"
                     + "'" + user.getPassword() + "',"
@@ -350,25 +346,21 @@ public class EditPetKeepersTable {
                     + "'" + user.getPersonalpage() + "',"
                     + "'" + user.getJob() + "',"
                     + "'" + user.getTelephone() + "',"
-                    + "'" + 0.0 + "',"
-                    + "'" + 0.0 + "',"
+                    + 0.0 + ","
+                    + 0.0 + ","
                     + "'" + user.getProperty() + "',"
                     + "'" + user.getPropertydescription() + "',"
                     + "'" + user.getCatkeeper() + "',"
                     + "'" + user.getDogkeeper() + "',"
-                    + "'" + user.getCatprice() + "',"
-                    + "'" + user.getDogprice() + "'"
-                    + ")";
-            //stmt.execute(table);
+                    + user.getCatprice() + ","
+                    + user.getDogprice() + ")";
+
             System.out.println(insertQuery);
             stmt.executeUpdate(insertQuery);
             System.out.println("# The pet owner was successfully added in the database.");
-
-            /* Get the member id from the database and set it to the member */
             stmt.close();
-
         } catch (SQLException ex) {
-            Logger.getLogger(EditPetKeepersTable.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditPetKeepersTable.class.getName()).log(Level.SEVERE, "SQL Exception: " + ex.getMessage(), ex);
         }
     }
 
