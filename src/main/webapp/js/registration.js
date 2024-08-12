@@ -368,8 +368,7 @@ function PostUser() {
             if (xhr.status === 200) {
                 try {
                     const responseData = JSON.parse(xhr.responseText);
-                    console.log("Server response:", responseData);
-
+                    window.location.href = 'login.html';
                 } catch (e) {
                     ajaxContent.html('Error parsing response: ' + e.message + "<br>");
                 }
