@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(124, 155, 166);
+    background-color: #FFF5E4;
     display: flex;
 
     align-items: center;
@@ -41,7 +41,7 @@ input{
     font-size: 14px;
     border-style: none;
     border-radius: 3px;
-    background-color: #cab4b4;
+    background-color: #FFD1D1;
     color: #333;
 
 
@@ -63,11 +63,11 @@ label{
     margin:auto;
     width: 150px;
     height: 30px;
-    background-color: rgb(72, 99, 57);
+    background-color: #FF9494;
 }
 
 #loginButton:hover{
-    background-color: rgb(94, 125, 78);
+    background-color: #FFD1D1;
     transition: all 0.3s ease 0s;
     cursor: pointer;
 }

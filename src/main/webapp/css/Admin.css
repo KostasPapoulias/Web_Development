@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(124, 155, 166);
+    background-color: #FFF5E4;
 
     align-items: center;
     min-height: 100vh;
@@ -17,7 +17,7 @@ body{
 
 .navbar {
     overflow: hidden;
-    background-color: #333;
+    background-color: #758086;
     font-family: Arial;
 }
 
@@ -52,7 +52,7 @@ body{
 
 /* Add a red background color to navbar links on hover */
 .navbar a:hover, .dropdown:hover .dropbtn {
-    background-color: rgb(94, 125, 78);
+    background-color: #FF9494;
     transition: all 0.3s ease 0s;
     cursor: pointer;
 }
