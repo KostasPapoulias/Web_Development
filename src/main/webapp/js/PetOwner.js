@@ -73,10 +73,15 @@ document.getElementById("booked").addEventListener('click', switchToBooked);
 function switchToBooking() {
     document.getElementById("booking_context").style.display = "block";
     document.getElementById("booked_context").style.display = "none";
+    document.getElementById("booking").style.backgroundColor = "#FF9494";
+    document.getElementById("booked").style.backgroundColor = "#758086";
 }
 function switchToBooked() {
     document.getElementById("booking_context").style.display = "none";
     document.getElementById("booked_context").style.display = "block";
+    document.getElementById("booked").style.backgroundColor = "#FF9494";
+    document.getElementById("booking").style.backgroundColor = "#758086";
+
 }
 // document.addEventListener('DOMContentLoaded', function() {
 //     const changeInfoHeader = document.querySelector('#change_info_container > h3');
@@ -741,46 +746,56 @@ function ChangeUserInfo() {
 function PostPet() {
     const formElement = document.getElementById('petForm');
 
-    const xhr = new XMLHttpRequest();
+    const fileInput = document.getElementById('photo');
+    const file = fileInput.files[0];
 
-    xhr.onload = function () {
-        const ajaxContent = $('#newPet');
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const responseData = JSON.parse(xhr.responseText);
-                ajaxContent.html("Successful Pet Registration. <br> Your Data");
-                ajaxContent.append(createTableFromJSON(responseData));
-            } else {
-                ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
-                try {
+    if (file && file.type === 'image/jpeg') {
+        formData.append('photo', file);
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+            const ajaxContent = $('#newPet');
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
                     const responseData = JSON.parse(xhr.responseText);
-                    for (const key in responseData) {
-                        if (responseData.hasOwnProperty(key)) {
-                            ajaxContent.append(`<p style='color:red'>${key} = ${responseData[key]}</p>`);
+                    ajaxContent.html("Successful Pet Registration. <br> Your Data");
+                    ajaxContent.append(createTableFromJSON(responseData));
+                } else {
+                    ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
+                    try {
+                        const responseData = JSON.parse(xhr.responseText);
+                        for (const key in responseData) {
+                            if (responseData.hasOwnProperty(key)) {
+                                ajaxContent.append(`<p style='color:red'>${key} = ${responseData[key]}</p>`);
+                            }
                         }
+                    } catch (e) {
+                        ajaxContent.append(`<p style='color:red'>Error parsing response: ${xhr.responseText}</p>`);
                     }
-                } catch (e) {
-                    ajaxContent.append(`<p style='color:red'>Error parsing response: ${xhr.responseText}</p>`);
                 }
             }
-        }
-    };
+        };
 
-    const formData = new FormData(formElement);
-    const data = {};
-    formData.forEach((value, key) => (data[key] = value));
+        const formData = new FormData(formElement);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
 
-    getOwnerId(GlobalUsername).then(ownerId => {
-        console.log('Owner ID:', ownerId);
-        data.pet_id = String(ownerId) + String(data.birthyear);
-        data.owner_id = ownerId;
-        console.log(data);
-        xhr.open('POST', 'GetPostPets?');
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(JSON.stringify(data));
-    }).catch(error => {
-        console.error('Error:', error);
-    });
+        getOwnerId(GlobalUsername).then(ownerId => {
+            console.log('Owner ID:', ownerId);
+            data.pet_id = String(ownerId) + String(data.birthyear);
+            data.owner_id = ownerId;
+            // console.log(data);
+            xhr.open('POST', 'GetPostPets?');
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(JSON.stringify(data));
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    else{
+        console.log('Invalid file type.');
+    }
 }
 
 
