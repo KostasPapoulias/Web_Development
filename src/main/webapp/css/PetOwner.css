@@ -12,7 +12,7 @@ body{
     height: 100px;
 }
 #booking_form{
-    background-color: white;
+    background-color: #758086;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -231,9 +231,9 @@ body{
 }
 
 .content {
+    background-color: #758086;
     max-height: 0;
     overflow: hidden;
-    background-color: white;
     transition: max-height 0.3s ease, padding 0.3s ease;
     padding: 0 15px;
 
@@ -241,6 +241,10 @@ body{
 .component.open .content {
     max-height: 500px;
     padding: 15px;
+}
+.component.open .header {
+    background-color: #FF9494;
+
 }
 .component:not(.open) .content {
     padding: 0 15px;
