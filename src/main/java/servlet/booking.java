@@ -84,9 +84,7 @@ public class booking extends HttpServlet {
         response.getWriter().write(petIdsJson);
     }
 
-    // Utility method to convert a list to JSON format. Implement this method based on your JSON library of choice.
     private String convertListToJson(List<String> list) {
-        // This is a placeholder. Use your preferred method to convert a list to JSON.
         return list.toString(); // Simple placeholder implementation
     }
 }

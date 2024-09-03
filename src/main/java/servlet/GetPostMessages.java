@@ -39,7 +39,6 @@ public class GetPostMessages extends HttpServlet {
         Gson gson = new Gson();
         mainClasses.Message msg = gson.fromJson(jsonBuffer.toString(), mainClasses.Message.class);
 
-//        EditMessagesTable editMessagesTable = new EditMessagesTable();
         try {
             editMessagesTable.createNewMessage(msg);
             response.setStatus(HttpServletResponse.SC_OK);

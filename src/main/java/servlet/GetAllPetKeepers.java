@@ -36,12 +36,12 @@ public class GetAllPetKeepers extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, ClassNotFoundException {
-        //
+
     }
 
     /**
      * Handles the HTTP <code>GET</code> method.
-     *
+     * Returns the available pet keepers
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -54,23 +54,20 @@ public class GetAllPetKeepers extends HttpServlet {
 
         try ( PrintWriter out = response.getWriter()) {
             EditPetKeepersTable eut = new EditPetKeepersTable();
-            // Retrieve the type from the request parameters
             String type = request.getParameter("type");
             if (type == null) {
                 type = "all"; // Default to "all" if no type parameter is provided
             }
             ArrayList<PetKeeper> petKeepers = eut.getAvailableKeepers(type);
 
-            // Convert the list of PetKeepers to JSON
             Gson gson = new Gson();
             String json = gson.toJson(petKeepers);
 
-            // Send the JSON response
             out.println(json);
             response.setStatus(200);
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(GetPetKeeper.class.getName()).log(Level.SEVERE, null, ex);
-            response.setStatus(500); // Internal Server Error
+            response.setStatus(500);
         }
     }
 

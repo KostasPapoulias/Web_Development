@@ -14,13 +14,11 @@ function createTableFromJSON(data) {
 
 
 function getAllKeepers() {
-    // Make an AJAX request to fetch pet keepers
     $.ajax({
-        url: 'GetAllPetKeepers?', // Replace with the actual URL to your servlet
+        url: 'GetAllPetKeepers?',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            // Process the received data
             displayPetKeepers(data);
         },
         error: function (error) {
@@ -43,7 +41,6 @@ function displayPetKeepers(petKeepers) {
                         </tr>`;
 
 
-        // Loop through each pet keeper and display their details
         petKeepers.forEach(function (petKeeper) {
             tableHTML += '<tr class="text">' +
                     '<td> ' + petKeeper.firstname + '</td>' +

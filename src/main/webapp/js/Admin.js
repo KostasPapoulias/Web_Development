@@ -1,4 +1,3 @@
-//TODO implement the statistics
 var context = document.getElementById("context");
 
 document.getElementById('petKeepers').addEventListener('click', doPetKeepers);
@@ -206,7 +205,7 @@ function getAllProfits(){
 
 function displayProfits(data){
     var context = document.getElementById('context');
-    context.innerHTML = ''; // Clear previous content
+    context.innerHTML = '';
     let profit = 0;
     if (data && data.length > 0) {
 
@@ -246,7 +245,7 @@ function createTableFromJSON(data) {
 
 function displayData(data) {
     var context = document.getElementById('context');
-    context.innerHTML = ''; // Clear previous content
+    context.innerHTML = '';
 
     if (data && data.length > 0) {
         let tableHTML = `<table id="table">
@@ -272,11 +271,8 @@ function displayData(data) {
 }
 
 function deleteUser(button, user) {
-    console.log(user);
     const url = user.keeper_id ? 'DeletePetKeeper' : 'DeletePetOwner';
-    console.log(url);
     const username = user.username;
-    console.log(username);
     $.ajax({
         url: url,
         data: {
@@ -285,7 +281,6 @@ function deleteUser(button, user) {
         type: 'POST',
         dataType: 'json',
         success: function (data) {
-            console.log(data);
             const row = button.parentNode.parentNode;
             row.parentNode.removeChild(row);
         },
@@ -303,15 +298,12 @@ function deleteUser(button, user) {
 
 
 function getAllKeepers() {
-    // Make an AJAX request to fetch pet keepers
     $.ajax({
-        url: 'GetAllAllPetKeepers?', // Replace with the actual URL to your servlet
+        url: 'GetAllAllPetKeepers?',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            // Process the received data
-            console.log(data);
-            // displayPetKeepers(data);
+
             displayData(data)
         },
         error: function (error) {
@@ -334,7 +326,6 @@ function displayPetKeepers(petKeepers) {
                         </tr>`;
 
 
-        // Loop through each pet keeper and display their details
         petKeepers.forEach(function (petKeeper) {
             tableHTML += '<tr class="text">' +
                     '<td> ' + petKeeper.firstname + '</td>' +
@@ -351,14 +342,12 @@ function displayPetKeepers(petKeepers) {
 
 
 function getAllOwners() {
-    // Make an AJAX request to fetch pet keepers
     $.ajax({
-        url: 'GetAllPetOwners?', // Replace with the actual URL to your servlet
+        url: 'GetAllPetOwners?',
         type: 'GET',
         dataType: 'json',
         success: function (data) {
-            // Process the received data
-            // displayPetKeepers(data);
+
             displayData(data)
         },
         error: function (error) {
@@ -381,7 +370,6 @@ function displayPetKeepers(petKeepers) {
                         </tr>`;
 
 
-        // Loop through each pet keeper and display their details
         petKeepers.forEach(function (petKeeper) {
             tableHTML += '<tr class="text">' +
                     '<td> ' + petKeeper.firstname + '</td>' +

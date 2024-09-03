@@ -15,6 +15,15 @@ import java.sql.SQLException;
 public class ChangeUserInfo extends HttpServlet {
 
 
+    /**
+     * It updates the user's information in the database
+     *
+     * It returns the petOwner's ID by the username
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         StringBuilder buffer = new StringBuilder();
@@ -43,6 +52,7 @@ public class ChangeUserInfo extends HttpServlet {
     }
 
     @Override
+
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");

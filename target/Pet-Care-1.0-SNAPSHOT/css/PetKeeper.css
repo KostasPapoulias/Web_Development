@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(124, 155, 166);
+    background-color: #FFF5E4;
     display: flex;
 
     align-items: center;
@@ -10,7 +10,7 @@ body{
 }
 
 #booking_container{
-    background-color: white;
+    background-color: #758086;
     border: solid 1px black;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -25,7 +25,7 @@ body{
 
 }
 #booking{
-    background-color: white;
+    background-color: #758086;
     padding: 20px;
     border-radius: 10px;
     width: 39%;
@@ -36,7 +36,7 @@ body{
     left: 0;
 }
 #message_container{
-    background-color: white;
+    background-color: #758086;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -83,7 +83,7 @@ body{
 }
 #msg_cont{
     display: none;
-    background-color: white;
+    background-color: #758086;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -101,7 +101,7 @@ body{
 
 }
 #change_info_container{
-    background-color: white;
+    background-color: #758086;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -122,7 +122,7 @@ body{
 
 }
 #feedback_container{
-    background-color: white;
+    background-color: #758086;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

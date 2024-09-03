@@ -53,7 +53,6 @@ public class GetPetOwner extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             EditPetOwnersTable eut = new EditPetOwnersTable();
             PetOwner su = eut.databaseToPetOwners(username, password);
             if (su == null) {

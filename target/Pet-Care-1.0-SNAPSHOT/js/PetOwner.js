@@ -1,3 +1,4 @@
+//TODO after book is finished leave a review
 let params = new URLSearchParams(window.location.search);
 const GlobalUsername = params.get('username');
 let GlobalOwnerId ;
@@ -22,6 +23,7 @@ function retrieveData() {
     getOwnerId(GlobalUsername).then(ownerId => {
         console.log('Owner ID:', ownerId);
         GlobalOwnerId = ownerId;
+        giveReview(ownerId);
         getPets(GlobalOwnerId).then(type => {
             console.log('Type:', type);
             getPetKeepers(type);
@@ -35,45 +37,81 @@ function retrieveData() {
 
 
 //CONTROLLERS
+document.addEventListener('DOMContentLoaded', function() {
+    const components = document.querySelectorAll('.component');
+
+    components.forEach(component => {
+        const header = component.querySelector('.header');
+        const content = component.querySelector('.content');
+
+        header.addEventListener('click', function() {
+            const isOpen = component.classList.contains('open');
+
+            components.forEach(comp => {
+                const compContent = comp.querySelector('.content');
+                comp.classList.remove('open');
+                compContent.style.maxHeight = null;
+                compContent.style.paddingTop = 0;
+                compContent.style.paddingBottom = 0;
+            });
+
+            if (!isOpen) {
+                component.classList.add('open');
+                content.style.maxHeight = content.scrollHeight + "px";
+                content.style.paddingTop = "15px";
+                content.style.paddingBottom = "15px";
+            }
+        });
+    });
+});
+
+
+
+
 document.getElementById("booking").addEventListener('click', switchToBooking);
 document.getElementById("booked").addEventListener('click', switchToBooked);
 function switchToBooking() {
     document.getElementById("booking_context").style.display = "block";
     document.getElementById("booked_context").style.display = "none";
+    document.getElementById("booking").style.backgroundColor = "#FF9494";
+    document.getElementById("booked").style.backgroundColor = "#758086";
 }
 function switchToBooked() {
     document.getElementById("booking_context").style.display = "none";
     document.getElementById("booked_context").style.display = "block";
+    document.getElementById("booked").style.backgroundColor = "#FF9494";
+    document.getElementById("booking").style.backgroundColor = "#758086";
+
 }
-document.addEventListener('DOMContentLoaded', function() {
-    const changeInfoHeader = document.querySelector('#change_info_container > h3');
-    const newPetHeader = document.querySelector('#newPet_container > h3');
-    const changeInfoContainer = document.getElementById('change_info_container');
-    const newPetContainer = document.getElementById('newPet_container');
-
-    changeInfoHeader.addEventListener('click', function() {
-        if (!newPetContainer.classList.contains('collapsed')) {
-            newPetContainer.classList.toggle('collapsed');
-            setTimeout(() => {
-                changeInfoContainer.classList.toggle('expanded');
-            }, 300); 
-        } else {
-            changeInfoContainer.classList.toggle('expanded');
-        }
-        
-    });
-
-    newPetHeader.addEventListener('click', function() {
-        if (changeInfoContainer.classList.contains('expanded')) {
-            changeInfoContainer.classList.remove('expanded');
-            setTimeout(() => {
-                newPetContainer.classList.toggle('collapsed');
-            }, 300); 
-        } else {
-            newPetContainer.classList.toggle('collapsed');
-        }
-    });
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     const changeInfoHeader = document.querySelector('#change_info_container > h3');
+//     const newPetHeader = document.querySelector('#newPet_container > h3');
+//     const changeInfoContainer = document.getElementById('change_info_container');
+//     const newPetContainer = document.getElementById('newPet_container');
+//
+//     changeInfoHeader.addEventListener('click', function() {
+//         if (!newPetContainer.classList.contains('collapsed')) {
+//             newPetContainer.classList.toggle('collapsed');
+//             setTimeout(() => {
+//                 changeInfoContainer.classList.toggle('expanded');
+//             }, 300);
+//         } else {
+//             changeInfoContainer.classList.toggle('expanded');
+//         }
+//
+//     });
+//
+//     newPetHeader.addEventListener('click', function() {
+//         if (changeInfoContainer.classList.contains('expanded')) {
+//             changeInfoContainer.classList.remove('expanded');
+//             setTimeout(() => {
+//                 newPetContainer.classList.toggle('collapsed');
+//             }, 300);
+//         } else {
+//             newPetContainer.classList.toggle('collapsed');
+//         }
+//     });
+// });
 document.addEventListener('DOMContentLoaded', function() {
     const messageHeader = document.querySelector('#message_container > h3'); 
     const messageContainer = document.getElementById('message_container');
@@ -105,10 +143,78 @@ function createTableFromJSON(data) {
     return html;
 
 }
+
+function giveReview(ownerId){
+console.log("here")
+    $.ajax({
+        url: 'bookingIds',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log(data)
+            let ownerBookings = data.filter(item => item.owner_id === ownerId && item.status === 'finished');
+            console.log(ownerBookings)
+            if(ownerBookings.length > 0)
+                sendReview(ownerBookings);
+            else{
+                $('#feedback').html("No bookings to review");
+            }
+        },
+        error: function(error) {
+            console.error('Error fetching keeper IDs:', error);
+            reject(error);
+        }
+    });
+
+}
+function sendReview(bookings){
+    const feedbackContainer = $('#feedback');
+    feedbackContainer.empty();
+
+    bookings.forEach(booking => {
+        const form = $('<form class="feedback-form"></form>');
+        form.append('<h4>Review for booking ID: ' + booking.booking_id + '</h4>');
+        form.append('<label for="reviewScore">Rating:</label><br>');
+        form.append('<input type="number" id="reviewScore" name="reviewScore" min="1" max="5"><br>');
+        form.append('<label for="reviewText">Comments:</label><br>');
+        form.append('<textarea id="reviewText" name="reviewText"></textarea><br>');
+        form.append('<input type="submit" value="Submit">');
+
+        form.on('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form[0]);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            data.keeper_id = booking.keeper_id;
+            data.owner_id = booking.owner_id;
+
+            console.log(data)
+
+            $.ajax({
+                url: 'Reviews',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    console.log('Review submitted successfully:', response);
+                    form.remove();
+                },
+                error: function(error) {
+                    console.error('Error submitting review:', error);
+                }
+            });
+        });
+
+        feedbackContainer.append(form);
+    });
+}
+
 /**
  * displays pet owner's registered pets
- * @param {*} pets 
- * @returns 
+ * @param {*} pets
+ * @returns
  */
 function displayPets(pets) {
     var html = '';
@@ -239,15 +345,38 @@ function displayPetKeepers(petKeepers) {
  */
 function makeBooking(petKeeper, pet) {
     var form = $('<form id="form"></form>');
-    form.append('<label for="price">Price:</label><br>');
-    form.append('<input type="text" id="price" name="price" value="' + petKeeper.dogprice + '" readonly><br>'); // You'll need to set the price
-    form.append('<label for="from">From:</label><br>');
-    form.append('<input type="date" id="fromDate" name="fromDate"><br>');
-    form.append('<label for="to">To:</label><br>');
+
+    // Append PetKeeper and Pet Name
+    form.append('<div>PetKeeper: ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
+    form.append('<div>Pet: ' + pet.name + '</div>');
+
+    form.append('<label for="priceDay">Price per day:</label><br>');
+    form.append('<input type="text" id="priceDay" name="priceDay" readonly><br>');
+    form.append('<label for="from">From:</label>');
+    form.append('<input type="date" id="fromDate" name="fromDate">');
+    form.append('<label for="to">To:</label>');
     form.append('<input type="date" id="toDate" name="toDate"><br>');
+    form.append('<label for="price">Total price:</label><br>');
+    form.append('<input type="text" id="price" name="price" readonly><br>');
     form.append('<input type="submit" value="Submit">');
 
     $('#formBook').append(form);
+
+    $('#priceDay').val(pet.type ==='dog' ? petKeeper.dogprice : petKeeper.catprice);
+
+    // Event listener to calculate duration and price
+    form.on('change', '#toDate, #fromDate', function() {
+        var fromDate = new Date($('#fromDate').val());
+        var toDate = new Date($('#toDate').val());
+        if (fromDate && toDate && toDate > fromDate) {
+            var duration = (toDate - fromDate) / (1000 * 60 * 60 * 24);
+            var pricePerDay = pet.type === 'dog' ? petKeeper.dogprice : petKeeper.catprice;
+            var totalPrice = duration * pricePerDay;
+            $('#price').val(totalPrice);
+        } else {
+            $('#price').val('');
+        }
+    });
 
     form.on('submit', function(e) {
         e.preventDefault();
@@ -263,7 +392,7 @@ function makeBooking(petKeeper, pet) {
         });
         data.owner_id = GlobalOwnerId;
         data.keeper_id = petKeeper.keeper_id;
-        data.status = "requested"
+        data.status = "requested";
         data.pet_id = pet.pet_id.toString();
         console.log(data);
 
@@ -617,46 +746,56 @@ function ChangeUserInfo() {
 function PostPet() {
     const formElement = document.getElementById('petForm');
 
-    const xhr = new XMLHttpRequest();
+    const fileInput = document.getElementById('photo');
+    const file = fileInput.files[0];
 
-    xhr.onload = function () {
-        const ajaxContent = $('#newPet');
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                const responseData = JSON.parse(xhr.responseText);
-                ajaxContent.html("Successful Pet Registration. <br> Your Data");
-                ajaxContent.append(createTableFromJSON(responseData));
-            } else {
-                ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
-                try {
+    if (file && file.type === 'image/jpeg') {
+        formData.append('photo', file);
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+            const ajaxContent = $('#newPet');
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
                     const responseData = JSON.parse(xhr.responseText);
-                    for (const key in responseData) {
-                        if (responseData.hasOwnProperty(key)) {
-                            ajaxContent.append(`<p style='color:red'>${key} = ${responseData[key]}</p>`);
+                    ajaxContent.html("Successful Pet Registration. <br> Your Data");
+                    ajaxContent.append(createTableFromJSON(responseData));
+                } else {
+                    ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
+                    try {
+                        const responseData = JSON.parse(xhr.responseText);
+                        for (const key in responseData) {
+                            if (responseData.hasOwnProperty(key)) {
+                                ajaxContent.append(`<p style='color:red'>${key} = ${responseData[key]}</p>`);
+                            }
                         }
+                    } catch (e) {
+                        ajaxContent.append(`<p style='color:red'>Error parsing response: ${xhr.responseText}</p>`);
                     }
-                } catch (e) {
-                    ajaxContent.append(`<p style='color:red'>Error parsing response: ${xhr.responseText}</p>`);
                 }
             }
-        }
-    };
+        };
 
-    const formData = new FormData(formElement);
-    const data = {};
-    formData.forEach((value, key) => (data[key] = value));
+        const formData = new FormData(formElement);
+        const data = {};
+        formData.forEach((value, key) => (data[key] = value));
 
-    getOwnerId(GlobalUsername).then(ownerId => {
-        console.log('Owner ID:', ownerId);
-        data.pet_id = String(ownerId) + String(data.birthyear);
-        data.owner_id = ownerId;
-        console.log(data);
-        xhr.open('POST', 'GetPostPets?');
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(JSON.stringify(data));
-    }).catch(error => {
-        console.error('Error:', error);
-    });
+        getOwnerId(GlobalUsername).then(ownerId => {
+            console.log('Owner ID:', ownerId);
+            data.pet_id = String(ownerId) + String(data.birthyear);
+            data.owner_id = ownerId;
+            // console.log(data);
+            xhr.open('POST', 'GetPostPets?');
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(JSON.stringify(data));
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    else{
+        console.log('Invalid file type.');
+    }
 }
 
 

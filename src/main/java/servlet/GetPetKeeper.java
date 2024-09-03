@@ -53,7 +53,6 @@ public class GetPetKeeper extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             EditPetKeepersTable eut = new EditPetKeepersTable();
             PetKeeper su = eut.databaseToPetKeepers(username, password);
             if (su == null) {

@@ -37,10 +37,7 @@ public class GetPostPets extends HttpServlet {
         Gson gson = new Gson();
         Pet newPet = gson.fromJson(data, Pet.class);
 
-
-
         try ( PrintWriter out = response.getWriter()) {
-            //newPet = gson.fromJson(jsonString, Pet.class);
 
             EditPetsTable eut = new EditPetsTable();
 

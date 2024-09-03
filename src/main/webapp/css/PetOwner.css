@@ -91,12 +91,12 @@ body{
     left: 0;
     margin-top: 1%;
     margin-left: 40%;
-    flex-wrap: wrap; /* Allow items to wrap as needed */
-    align-items: flex-start; /* Align items at the start of the container */
+    flex-wrap: wrap;
+    align-items: flex-start;
     text-align: center;
     height: 200px;
-    overflow: auto; /* Add this line */
-    overflow-y: scroll; /* Add this line */
+    overflow: auto;
+    overflow-y: scroll;
 
 }
 
@@ -116,12 +116,12 @@ body{
     left: 0;
     margin-bottom: 1%;
     margin-left: 40%;
-    flex-wrap: wrap; /* Allow items to wrap as needed */
-    align-items: flex-start; /* Align items at the start of the container */
+    flex-wrap: wrap;
+    align-items: flex-start;
     text-align: center;
     overflow: hidden;
-    transition: min-height 1s ease-out, max-height 1s ease-out; /* Add min-height to the transition property */
-    max-height: 55px; /* Start in a collapsed state */
+    transition: min-height 1s ease-out, max-height 1s ease-out;
+    max-height: 55px;
 
 }
 
@@ -135,7 +135,7 @@ body{
 }
 
 #message_container.expanded {
-    min-height: 400px; /* Adjust based on the content size */
+    min-height: 400px;
 }
 
 #text_area{
@@ -167,36 +167,14 @@ body{
     position: absolute;
     bottom: 0;
     left: 0;
-    flex-wrap: wrap; /* Allow items to wrap as needed */
-    align-items: flex-start; /* Align items at the start of the container */
+    flex-wrap: wrap;
+    align-items: flex-start;
     text-align: center;
     overflow: hidden;
 
 }
 
-/*#change_info_container{*/
-/*    background-color: white;*/
-/*    padding: 20px;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
-/*    width: 18%;*/
-/*    border: solid 1px black;*/
-/*    !* height: 40%; *!*/
-/*    position: absolute;*/
-/*    bottom: 0;*/
-/*    right: 0;*/
-/*    margin-bottom: 1%;*/
-/*    margin-right: 8%;*/
-/*    flex-wrap: wrap; !* Allow items to wrap as needed *!*/
-/*    align-items: flex-start; !* Align items at the start of the container *!*/
-/*    text-align: center;*/
-/*    overflow: hidden;*/
-/*    transition: max-height 0.5s ease-out;*/
-/*    max-height: 55px; !* Start in a collapsed state *!*/
-/*    !*display: flex;*!*/
-/*    !*flex-direction: column;*!*/
 
-/*}*/
 .right{
     position: absolute;
     right: 125px;
@@ -250,45 +228,7 @@ body{
     padding: 0 15px;
 }
 
-/*#change_info_container.expanded, #newPet_container.expanded {*/
-/*    transition: max-height 0.5s ease-out;*/
-/*    max-height: 2000px; !* Large enough to show the whole content when expanded *!*/
-/*}*/
 
-/*#newPet_container{*/
-/*    */
-/*    background-color: white;*/
-/*    padding: 5px;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
-/*    width: 20%;*/
-/*    border: solid 1px black;*/
-/*    height: auto;*/
-/*    position: absolute;*/
-/*    top: 0;*/
-/*    right: 0;*/
-/*    margin-top: 1%;*/
-/*    margin-right: 8%;*/
-/*    align-items: flex-start; !* Align items at the start of the container *!*/
-/*    text-align: center;*/
-/*    overflow: hidden;*/
-/*    transition: max-height 0.5s ease-out;*/
-/*    max-height: 2000px; !* Large enough to show the whole content when expanded *!*/
-/*}*/
-
-/*#newPet_container.collapsed {*/
-/*    transition: max-height 0.5s ease-out;*/
-/*    max-height: 55px; !* Adjust based on the header size *!*/
-/*}*/
-/*#feedback_container{*/
-/*    background-color: white;*/
-/*    padding: 20px;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
-/*    width: 50%;*/
-/*    border: solid 1px black;*/
-
-/*}*/
 
 #th, td{
     background-color: bisque;

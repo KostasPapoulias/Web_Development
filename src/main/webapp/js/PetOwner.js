@@ -1,9 +1,7 @@
-//TODO after book is finished leave a review
 let params = new URLSearchParams(window.location.search);
 const GlobalUsername = params.get('username');
 let GlobalOwnerId ;
 let petKeeperUsername;
-console.log("username :" + GlobalUsername);
 
 retrieveData();
 
@@ -21,11 +19,9 @@ retrieveData();
 
 function retrieveData() {
     getOwnerId(GlobalUsername).then(ownerId => {
-        console.log('Owner ID:', ownerId);
         GlobalOwnerId = ownerId;
         giveReview(ownerId);
         getPets(GlobalOwnerId).then(type => {
-            console.log('Type:', type);
             getPetKeepers(type);
         }).catch(error => {
             console.error('Error:', error);
@@ -83,35 +79,7 @@ function switchToBooked() {
     document.getElementById("booking").style.backgroundColor = "#758086";
 
 }
-// document.addEventListener('DOMContentLoaded', function() {
-//     const changeInfoHeader = document.querySelector('#change_info_container > h3');
-//     const newPetHeader = document.querySelector('#newPet_container > h3');
-//     const changeInfoContainer = document.getElementById('change_info_container');
-//     const newPetContainer = document.getElementById('newPet_container');
-//
-//     changeInfoHeader.addEventListener('click', function() {
-//         if (!newPetContainer.classList.contains('collapsed')) {
-//             newPetContainer.classList.toggle('collapsed');
-//             setTimeout(() => {
-//                 changeInfoContainer.classList.toggle('expanded');
-//             }, 300);
-//         } else {
-//             changeInfoContainer.classList.toggle('expanded');
-//         }
-//
-//     });
-//
-//     newPetHeader.addEventListener('click', function() {
-//         if (changeInfoContainer.classList.contains('expanded')) {
-//             changeInfoContainer.classList.remove('expanded');
-//             setTimeout(() => {
-//                 newPetContainer.classList.toggle('collapsed');
-//             }, 300);
-//         } else {
-//             newPetContainer.classList.toggle('collapsed');
-//         }
-//     });
-// });
+
 document.addEventListener('DOMContentLoaded', function() {
     const messageHeader = document.querySelector('#message_container > h3'); 
     const messageContainer = document.getElementById('message_container');
@@ -145,15 +113,12 @@ function createTableFromJSON(data) {
 }
 
 function giveReview(ownerId){
-console.log("here")
     $.ajax({
         url: 'bookingIds',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            console.log(data)
             let ownerBookings = data.filter(item => item.owner_id === ownerId && item.status === 'finished');
-            console.log(ownerBookings)
             if(ownerBookings.length > 0)
                 sendReview(ownerBookings);
             else{
@@ -190,7 +155,6 @@ function sendReview(bookings){
             data.keeper_id = booking.keeper_id;
             data.owner_id = booking.owner_id;
 
-            console.log(data)
 
             $.ajax({
                 url: 'Reviews',
@@ -198,7 +162,6 @@ function sendReview(bookings){
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(response) {
-                    console.log('Review submitted successfully:', response);
                     form.remove();
                 },
                 error: function(error) {
@@ -227,7 +190,6 @@ function displayPets(pets) {
     return html;
 }
 
-// Declare a global array to store pets
 let petsArray = [];
 
 /**
@@ -251,7 +213,6 @@ function getPets(GlobalOwnerId) {
                     petsArray = data;
                     resolve(type);
                 } else {
-                    console.log(data + "Owner Id " + GlobalOwnerId)
                     ajaxContent.html('No pets found.');
                     resolve(null);
                 }
@@ -308,8 +269,7 @@ function displayPetKeepers(petKeepers) {
     var petKeepersList = $('#booking_context');
 
     petKeepersList.empty();
-    console.log(petKeepers);
-    console.log(unbookedPets);
+
     if (petKeepers && petKeepers.length > 0) {
         petKeepers.forEach(function (petKeeper) {
             var petKeeperElement = $('<div class="person">' + petKeeper.firstname + ' ' + petKeeper.lastname + '<br>' + petKeeper.city + ' ' + petKeeper.address + '<br>' + petKeeper.telephone + '<br>' + petKeeper.propertydescription +'<br>' +'</div>');
@@ -327,7 +287,6 @@ function displayPetKeepers(petKeepers) {
                 var bookButton = $('<button>' + pet.name + '</button>');
                 bookButton.click(function(e) {
                     e.stopPropagation();
-                    console.log('Booking for pet:', pet.name, 'with keeper:', petKeeper.username);
                     makeBooking(petKeeper, pet);
                 });
                 petKeeperElement.append(bookButton);
@@ -346,7 +305,6 @@ function displayPetKeepers(petKeepers) {
 function makeBooking(petKeeper, pet) {
     var form = $('<form id="form"></form>');
 
-    // Append PetKeeper and Pet Name
     form.append('<div>PetKeeper: ' + petKeeper.firstname + ' ' + petKeeper.lastname + '</div>');
     form.append('<div>Pet: ' + pet.name + '</div>');
 
@@ -364,7 +322,6 @@ function makeBooking(petKeeper, pet) {
 
     $('#priceDay').val(pet.type ==='dog' ? petKeeper.dogprice : petKeeper.catprice);
 
-    // Event listener to calculate duration and price
     form.on('change', '#toDate, #fromDate', function() {
         var fromDate = new Date($('#fromDate').val());
         var toDate = new Date($('#toDate').val());
@@ -394,7 +351,6 @@ function makeBooking(petKeeper, pet) {
         data.keeper_id = petKeeper.keeper_id;
         data.status = "requested";
         data.pet_id = pet.pet_id.toString();
-        console.log(data);
 
         $.ajax({
             url: 'booking?',
@@ -471,7 +427,6 @@ let unbookedPets = [];
  * @constructor
  */
 function GetPetsWithNoBooking() {
-    console.log("Attempting to retrieve pets with no booking for owner ID:", GlobalOwnerId);
 
     $.ajax({
         url: 'booking?',
@@ -484,7 +439,6 @@ function GetPetsWithNoBooking() {
                 if (Array.isArray(ownerPets)) {
                     const unbookedPetIds = ownerPets.filter(id => !bookingData.includes(id));
                     unbookedPets = unbookedPetIds;
-                    console.log('Unbooked Pet IDs:', unbookedPetIds);
                 } else {
                     console.error('Expected an array of pets, but got:', ownerPets);
                 }
@@ -512,7 +466,6 @@ function getPetsList(GlobalOwnerId) {
                 owner_id: GlobalOwnerId
             },
             success: function (data) {
-                // Process the received data
                 const ajaxContent = $('#pets');
                 if (data.length > 0) {
                     ajaxContent.html(displayPets(data));
@@ -520,7 +473,6 @@ function getPetsList(GlobalOwnerId) {
                     petsArray = data;
                     resolve(data);
                 } else {
-                    console.log(data + "Owner Id " + GlobalOwnerId)
                     ajaxContent.html('No pets found.');
                     resolve(null);
                 }
@@ -544,7 +496,6 @@ function getBookings() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data)
                 resolve(data);
             },
             error: function(error) {
@@ -566,7 +517,6 @@ function fetchPetKeepers() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log('Received pet keepers:', data);
                 resolve(data);
             },
             error: function(error) {
@@ -624,7 +574,6 @@ function userMessage(petKeeper, bookings) {
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(response) {
-                    console.log('Message sent successfully:', response);
                     textArea.value = '';
 
                     const messageElement = $('<div class="message">From: ' + data.sender + '<br>' + data.message + '</div>');
@@ -652,7 +601,6 @@ function userMessage(petKeeper, bookings) {
  * @returns {Promise<unknown>}
  */
 function getMessages(bookingId) {
-    console.log(bookingId);
     return new Promise((resolve, reject) => {
         $.ajax({
             url: 'GetPostMessages',
@@ -715,9 +663,6 @@ function ChangeUserInfo() {
             if (xhr.status === 200) {
                 if (xhr.getResponseHeader('Content-Type') === 'application/json') {
                     const responseData = JSON.parse(xhr.responseText);
-                    console.log('Response:', responseData);
-                } else {
-                    console.log('Unexpected response:', xhr.responseText);
                 }
             } else {
                 console.log('Request failed. Returned status of ' + xhr.status);
@@ -725,13 +670,10 @@ function ChangeUserInfo() {
         }
     };
 
-    // Prepare data for sending
     const formData = new FormData(formElement);
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
     data.username = GlobalUsername;
-    console.log(data);
-    // Set up and send the request
     xhr.open('POST', 'ChangeUserInfo?');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
@@ -782,10 +724,8 @@ function PostPet() {
         formData.forEach((value, key) => (data[key] = value));
 
         getOwnerId(GlobalUsername).then(ownerId => {
-            console.log('Owner ID:', ownerId);
             data.pet_id = String(ownerId) + String(data.birthyear);
             data.owner_id = ownerId;
-            // console.log(data);
             xhr.open('POST', 'GetPostPets?');
             xhr.setRequestHeader("Content-type", "application/json");
             xhr.send(JSON.stringify(data));
@@ -807,7 +747,6 @@ function PostPet() {
 
 function getOwnerId(username) {
     return new Promise((resolve, reject) => {
-        console.log('Sending request for owner ID with username:', username); // Log the username
         $.ajax({
             url: 'ChangeUserInfo',
             type: 'GET',
@@ -816,9 +755,7 @@ function getOwnerId(username) {
             },
             success: function(response) {
                 const responseData = JSON.parse(response);
-                console.log('Received response:', responseData); // Log the parsed response
                     if (responseData.ownerId) {
-                    console.log('Owner ID:', responseData.ownerId);
                     resolve(responseData.ownerId);
                 } else {
                     console.error('Owner ID not found in response');

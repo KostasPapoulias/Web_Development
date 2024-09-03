@@ -54,11 +54,7 @@ public class EditBookingsTable {
         String json = gson.toJson(r, Booking.class);
         return json;
     }
-    /**
-     * Retrieves all unique pet IDs for a given owner ID from the bookings table.
-     * @param ownerId The owner ID to search for.
-     * @return A list of unique pet IDs belonging to the owner in the bookings.
-     */
+
 
 
 

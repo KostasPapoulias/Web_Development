@@ -1,3 +1,5 @@
+//TODO add finish button to the reservations
+// add a piggy bank for the earned money? (read from the finished booking)
 console.log("PetKeeper.js is loaded");
 let params = new URLSearchParams(window.location.search);
 let KeeperId;
@@ -36,8 +38,8 @@ window.onload = function() {
     getKeeperId(Username, function(KeeperId) {
         console.log("KeeperId is now available: " + KeeperId);
         fetchAndDisplayBookings(KeeperId);
-        fetchAndDisplayPetKeepers();
-
+        displayMessage();
+        displayReviews();
     });
 
     function updatePriceFields() {
@@ -214,49 +216,200 @@ function updateBookingStatus(bookingId, status) {
     });
 }
 
-// Function to retrieve and display pet keepers
-function fetchAndDisplayPetKeepers() {
+function displayReviews(){
     $.ajax({
-        url: 'GetAllAllPetKeepers',
+        url: 'Reviews',
         type: 'GET',
+        data:{
+            keeper_id: KeeperId
+        },
+        dataType: 'json',
         success: function(data) {
-            const petKeepers = data;
-            const petKeeperContainer = document.getElementById('users_message');
-            petKeeperContainer.innerHTML = '';
-            petKeeperContainer.innerHTML = '<p>Pet Keepers</p>';
+            console.log(data);
+            const reviews = data;
+            const reviewContext = document.getElementById('feedback');
+            reviewContext.innerHTML = '';
 
-            petKeepers.forEach(petKeeper => {
-                const petKeeperElement = document.createElement('div');
-
-                if (petKeeper.username !== Username) {
-
-                    petKeeperElement.innerHTML += `
-                        <p>Pet Keeper ID: ${petKeeper.keeper_id}</p>
-                        <p>Name: ${petKeeper.username}</p>
+            if (reviews.length > 0) {
+                reviews.forEach(review => {
+                    const reviewElement = document.createElement('div');
+                    reviewElement.innerHTML = `
+                        <p>Review ID: ${review.review_id}</p>
+                        <p>Owner ID: ${review.owner_id}</p>
+                        <p>Rating: ${review.reviewScore}</p>
+                        <p>Review: ${review.reviewText}</p>
                         <hr>
                     `;
-                }
-                petKeeperElement.onclick = () => handlePetKeeperClick(petKeeper.username);
-
-                petKeeperContainer.appendChild(petKeeperElement);
-            });
+                    reviewContext.appendChild(reviewElement);
+                });
+            } else {
+                reviewContext.innerHTML = '<p>No reviews found for this keeper.</p>';
+            }
         },
         error: function(xhr, status, error) {
             console.error('Error: ' + xhr.responseText);
-            const petKeeperContainer = document.getElementById('petKeeperContainer');
-            petKeeperContainer.innerHTML = '<p style="color:red">Error fetching pet keepers.</p>';
+
+        }
+    })
+}
+
+function getBookings() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'bookingIds',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data)
+                resolve(data);
+            },
+            error: function(error) {
+                console.error('Error fetching keeper IDs:', error);
+                reject(error);
+            }
+        });
+    });
+}
+
+/**
+ * Display the contacts that pet owner has with the pet owners
+ */
+function displayMessage() {
+    fetchPetOwners().then(petOwners => {
+        getBookings().then(bookings => {
+            let petOwnersList = $('#users_message');
+            petOwnersList.empty();
+            console.log(petOwners);
+            const relevantOwnerIds = bookings.filter(booking => booking.keeper_id === KeeperId).map(booking => booking.owner_id);
+            const filteredPetOwners = petOwners.filter(petOwner => relevantOwnerIds.includes(petOwner.owner_id));
+            if (filteredPetOwners && filteredPetOwners.length > 0) {
+                filteredPetOwners.forEach(function(petOwner) {
+                    let petOwnerElement = $('<div class="person"> Name ' + petOwner.firstname + ' ' + petOwner.lastname + '</div>');
+
+                    petOwnerElement.click(function() {
+                        userMessage(petOwner, bookings);
+                    });
+                    petOwnersList.append(petOwnerElement);
+                });
+            } else {
+                petOwnersList.append('<p>No pet owners found in bookings.</p>');
+            }
+        }).catch(error => {
+            console.error('Error fetching owner IDs from bookings:', error);
+        });
+    }).catch(error => {
+        console.error('Error fetching pet owners:', error);
+    });
+}
+/**
+ * Fetch the pet owners from the server
+ * @returns {Promise<unknown>}
+ */
+function fetchPetOwners() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'GetAllPetOwners?',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log('Received pet owners:', data);
+                resolve(data);
+            },
+            error: function(error) {
+                console.error('Error fetching pet owners:', error);
+                reject(error);
+            }
+        });
+    });
+}
+// Function to retrieve and display pet owners
+function userMessage(petOwner, bookings) {
+    const msg_cont = document.getElementById('msg_cont');
+    const users_message = document.getElementById('users_message');
+    msg_cont.style.display = 'block';
+    users_message.style.display = 'none';
+    let msg = $('#messages');
+    msg.empty();
+    msg.append('<h2>' + petOwner.username + '</h2>' + '<br>');
+    const booking_id = bookings.filter(booking => booking.owner_id === petOwner.owner_id).map(booking => booking.booking_id);
+    getMessages(booking_id).then(messages => {
+        if (messages && messages.length > 0) {
+            messages.forEach(function(message) {
+                let messageElement = $('<div class="message">From: ' + message.sender + '<br>' + message.message + '</div>');
+                msg.append(messageElement);
+            });
+        } else {
+            msg.append('<p>No messages found.</p>');
+        }
+    }).catch(error => {
+        console.error('Error fetching messages:', error);
+    });
+
+    document.getElementById('sendButton').addEventListener('click', function() {
+        const textArea = document.getElementById('text_area');
+        const messageContent = textArea.value.trim();
+        const now = new Date();
+        const date = now.toISOString().split('T')[0];
+        const time = now.toTimeString().split(' ')[0];
+        if (messageContent) {
+            const data = {
+                booking_id: booking_id[0],
+                message: messageContent,
+                sender: Username,
+                datetime: `${date} ${time}`,
+            };
+
+            $.ajax({
+                url: 'GetPostMessages',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    console.log('Message sent successfully:', response);
+                    textArea.value = '';
+
+                    const messageElement = $('<div class="message">From: ' + data.sender + '<br>' + data.message + '</div>');
+                    $('#messages').append(messageElement);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error sending message:', {
+                        readyState: xhr.readyState,
+                        status: xhr.status,
+                        responseText: xhr.responseText,
+                        statusText: xhr.statusText,
+                        error: error
+                    });
+                }
+            });
+        } else {
+            console.log('Message content is empty.');
         }
     });
 }
 
-function handlePetKeeperClick(username) {
-    document.getElementById('users_message').style.display = 'none';
-    document.getElementById('msg_cont').style.display = 'block';
-    document.getElementById('msg_cont').innerHTML += `
-        <p>Send a message to ${username}</p>      
-    `;
+/**
+ * Get the messages from the database
+ * @param bookingId
+ * @returns {Promise<unknown>}
+ */
+function getMessages(bookingId) {
+    console.log(bookingId);
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: 'GetPostMessages',
+            type: 'GET',
+            data: {
+                booking_id: bookingId[0]
+            },
+            dataType: 'json',
+            success: function(data) {
+                resolve(data);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                reject(error);
+            }
+        });
+    });
 }
-
-
-
 

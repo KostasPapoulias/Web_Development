@@ -43,7 +43,6 @@ public class EditPetOwnersTable {
             updateQuery += "telephone='" + telephone + "',";
         }
 
-        // Remove the last comma
         if (updateQuery.endsWith(",")) {
             updateQuery = updateQuery.substring(0, updateQuery.length() - 1);
         }

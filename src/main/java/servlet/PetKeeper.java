@@ -1,10 +1,7 @@
 package servlet;
 
 import DB_tables.EditPetKeepersTable;
-import DB_tables.EditPetOwnersTable;
 import com.google.gson.Gson;
-import mainClasses.PetOwner;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

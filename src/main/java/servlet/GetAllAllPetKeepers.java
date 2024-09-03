@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This servlet returns all the PetKeepers
+ */
 public class GetAllAllPetKeepers extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -22,15 +25,12 @@ public class GetAllAllPetKeepers extends HttpServlet {
 
         try ( PrintWriter out = response.getWriter()) {
             EditPetKeepersTable eut = new EditPetKeepersTable();
-            // Retrieve the type from the request parameters
 
             ArrayList<PetKeeper> petKeepers = eut.getAllPetKeepers();
 
-            // Convert the list of PetKeepers to JSON
             Gson gson = new Gson();
             String json = gson.toJson(petKeepers);
 
-            // Send the JSON response
             out.println(json);
             response.setStatus(200);
         }

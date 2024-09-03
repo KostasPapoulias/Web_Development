@@ -1,22 +1,16 @@
-//TODO add finish button to the reservations
-// add a piggy bank for the earned money? (read from the finished booking)
-console.log("PetKeeper.js is loaded");
 let params = new URLSearchParams(window.location.search);
 let KeeperId;
 let Username = params.get('username');
 
 window.onload = function() {
-    console.log("Window loaded");
 
     if (!Username) {
         console.error("Username parameter is missing in the URL");
         return;
     }
 
-    console.log("username: " + Username);
 
     function getKeeperId(Username, callback) {
-        console.log("Making AJAX request with username: " + Username);
         $.ajax({
             url: 'PetKeeper?',
             type: 'GET',
@@ -24,9 +18,7 @@ window.onload = function() {
                 username: Username
             },
             success: function(data) {
-                console.log("AJAX request successful");
                 KeeperId = data.keeper_id;
-                console.log("KeeperId: " + KeeperId);
                 callback(KeeperId);
             },
             error: function(xhr, status, error) {
@@ -36,7 +28,6 @@ window.onload = function() {
     }
 
     getKeeperId(Username, function(KeeperId) {
-        console.log("KeeperId is now available: " + KeeperId);
         fetchAndDisplayBookings(KeeperId);
         displayMessage();
         displayReviews();
@@ -66,7 +57,6 @@ window.onload = function() {
 
     }
 
-    // Add event listeners to radio buttons
     const dogKeeperRadio = document.getElementById('dogkeeper');
     const catKeeperRadio = document.getElementById('catkeeper');
     const bothKeeperRadio = document.getElementById('bothKeeper');
@@ -79,18 +69,15 @@ window.onload = function() {
         console.error("One or more radio buttons are missing");
     }
 
-    // Initial call to set the correct visibility
     updatePriceFields();
 
 
     document.getElementById('back').addEventListener('click', function() {
-        console.log('Back button clicked');
         document.getElementById('users_message').style.display = 'block';
         document.getElementById('msg_cont').style.display = 'none';
     });
 };
 
-//      CHANGE INFO NOT SUCCESS, SUSPECT ISSUE RELATED TO FALSE REGISTRATION
 
 function ChangeUserInfo(){
 
@@ -142,19 +129,16 @@ function ChangeUserInfo(){
     data.dogprice = data.dogprice ? parseFloat(data.dogprice) : null;
 
     data.username = Username;
-    console.log(data);
     xhr.open('POST', 'PetKeeper?');
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.send(JSON.stringify(data));
 }
 // DOESN'T APPEAR FROM AND TO DATE???
 function fetchAndDisplayBookings(KeeperId) {
-    console.log(KeeperId);
     $.ajax({
         url: 'bookingIds',
         type: 'GET',
         success: function(data) {
-            console.log(data);
             const bookings = data;
             const filteredBookings = bookings.filter(booking => booking.keeper_id === KeeperId);
             const bookingContext = document.getElementById('booking_context');
@@ -197,7 +181,6 @@ function handleReject(bookingId) {
 }
 
 function updateBookingStatus(bookingId, status) {
-    console.log(bookingId + status);
     $.ajax({
         url: 'UpdateBookingStatus',
         type: 'POST',
@@ -207,7 +190,6 @@ function updateBookingStatus(bookingId, status) {
             status: status
         },
         success: function(response) {
-            console.log('Booking status updated successfully');
             fetchAndDisplayBookings(KeeperId);
         },
         error: function(xhr, status, error) {
@@ -225,7 +207,6 @@ function displayReviews(){
         },
         dataType: 'json',
         success: function(data) {
-            console.log(data);
             const reviews = data;
             const reviewContext = document.getElementById('feedback');
             reviewContext.innerHTML = '';
@@ -260,7 +241,6 @@ function getBookings() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data)
                 resolve(data);
             },
             error: function(error) {
@@ -279,7 +259,6 @@ function displayMessage() {
         getBookings().then(bookings => {
             let petOwnersList = $('#users_message');
             petOwnersList.empty();
-            console.log(petOwners);
             const relevantOwnerIds = bookings.filter(booking => booking.keeper_id === KeeperId).map(booking => booking.owner_id);
             const filteredPetOwners = petOwners.filter(petOwner => relevantOwnerIds.includes(petOwner.owner_id));
             if (filteredPetOwners && filteredPetOwners.length > 0) {
@@ -312,7 +291,6 @@ function fetchPetOwners() {
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log('Received pet owners:', data);
                 resolve(data);
             },
             error: function(error) {
@@ -365,7 +343,6 @@ function userMessage(petOwner, bookings) {
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(response) {
-                    console.log('Message sent successfully:', response);
                     textArea.value = '';
 
                     const messageElement = $('<div class="message">From: ' + data.sender + '<br>' + data.message + '</div>');
@@ -393,7 +370,6 @@ function userMessage(petOwner, bookings) {
  * @returns {Promise<unknown>}
  */
 function getMessages(bookingId) {
-    console.log(bookingId);
     return new Promise((resolve, reject) => {
         $.ajax({
             url: 'GetPostMessages',

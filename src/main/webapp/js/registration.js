@@ -102,13 +102,6 @@ function checkPasswordsMatch(){
 
 function  doRegister(){
 
-//    if(isRegisterWeak){
-//        makeRequireTrue();
-//    }else{
-//        alert("password is weak!");
-//    }
-
-
 }
 
 function makeRequireTrue(){
@@ -276,7 +269,6 @@ function openMap(){
 
 
     if (!map) {
-        // If the map variable doesn't exist, create a new map
         map = new OpenLayers.Map("mapId");
         map.addLayer(new OpenLayers.Layer.OSM());
 
@@ -305,7 +297,6 @@ function openMap(){
 }
 
 
-// Function to create an HTML table from JSON data
 function createTableFromJSON(data) {
     let html = "<table><tr><th>Category</th><th>Value</th></tr>";
     for (const key in data) {
