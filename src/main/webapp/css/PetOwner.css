@@ -8,8 +8,9 @@ body{
     font-family: Arial, sans-serif;
 }
 .person{
+    margin-top: 5px;
     border: solid 1px black;
-    height: 100px;
+    height: 130px;
 }
 #booking_form{
     background-color: #758086;
@@ -37,6 +38,7 @@ body{
     top: 0;
     left: 0;
     margin-left: 8%;
+    overflow-y: scroll;
 
 }
 #booking{

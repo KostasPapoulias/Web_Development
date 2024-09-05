@@ -284,18 +284,21 @@ function displayPetKeepers(petKeepers) {
             });
 
             filteredPets.forEach(function (pet) {
-                var bookButton = $('<button>' + pet.name + '</button>');
-                bookButton.click(function(e) {
-                    e.stopPropagation();
-                    makeBooking(petKeeper, pet);
-                });
-                petKeeperElement.append(bookButton);
+                if((pet.type === 'dog' && petKeeper.dogkeeper) || (pet.type === 'cat' && petKeeper.catkeeper)) {
+                    let bookButton = $('<button>' + pet.name + '</button>');
+
+                    bookButton.click(function (e) {
+                        e.stopPropagation();
+                        makeBooking(petKeeper, pet);
+                    });
+                    petKeeperElement.append(bookButton);
+                }
             });
 
             petKeepersList.append(petKeeperElement);
         });
     } else {
-        petKeepersList.append('<p>No pet keepers found.</p>');
+        petKeepersList.append('<p><br>No pet keepers found.</p>');
     }
 }
 /**
@@ -688,11 +691,6 @@ function ChangeUserInfo() {
 function PostPet() {
     const formElement = document.getElementById('petForm');
 
-    const fileInput = document.getElementById('photo');
-    const file = fileInput.files[0];
-
-    if (file && file.type === 'image/jpeg') {
-        formData.append('photo', file);
 
         const xhr = new XMLHttpRequest();
 
@@ -724,7 +722,7 @@ function PostPet() {
         formData.forEach((value, key) => (data[key] = value));
 
         getOwnerId(GlobalUsername).then(ownerId => {
-            data.pet_id = String(ownerId) + String(data.birthyear);
+            data.pet_id = String(ownerId) + String(data.birthyear) + String(data.weight);
             data.owner_id = ownerId;
             xhr.open('POST', 'GetPostPets?');
             xhr.setRequestHeader("Content-type", "application/json");
@@ -732,10 +730,8 @@ function PostPet() {
         }).catch(error => {
             console.error('Error:', error);
         });
-    }
-    else{
-        console.log('Invalid file type.');
-    }
+
+
 }
 
 
