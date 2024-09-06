@@ -23,7 +23,7 @@
 
                 <div id="ajaxContent"></div>
 
-                <button id="loginButton" type="button">
+                <button id="loginButton" type="submit">
                     Log in
                 </button>
             </form>
@@ -31,5 +31,14 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="js/PetOwnerlogin.js"></script>
+        <script>
+            document.getElementById('PetOwnerloginform').addEventListener('submit', function(event) {
+                event.preventDefault();
+                console.log("here")
+                const username = document.getElementById('username').value;
+                document.cookie = `username=${username}; path=/;`;
+                window.location.href = 'petOwner.html';
+            });
+        </script>
     </body>
 </html>

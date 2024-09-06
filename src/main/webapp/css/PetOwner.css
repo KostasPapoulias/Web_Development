@@ -7,6 +7,13 @@ body{
     margin: 0;
     font-family: Arial, sans-serif;
 }
+.logout{
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: solid black;
+
+}
 .person{
     margin-top: 5px;
     border: solid 1px black;

@@ -1,7 +1,30 @@
 let params = new URLSearchParams(window.location.search);
-const GlobalUsername = params.get('username');
+let GlobalUsername = params.get('username');
+window.onload = function() {
+    checkLoginStatus();
+};
 let GlobalOwnerId ;
 let petKeeperUsername;
+
+function logout() {
+    document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = 'login.html';
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function checkLoginStatus() {
+    const username = getCookie('username');
+    if (!username) {
+        window.location.href = 'login.html';
+    } else {
+        GlobalUsername = username;
+    }
+}
 
 retrieveData();
 
@@ -33,6 +56,7 @@ function retrieveData() {
 
 
 //CONTROLLERS
+document.getElementById('logoutButton').addEventListener('click', logout);
 document.addEventListener('DOMContentLoaded', function() {
     const components = document.querySelectorAll('.component');
 
