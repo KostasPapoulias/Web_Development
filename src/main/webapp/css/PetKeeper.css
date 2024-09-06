@@ -9,6 +9,13 @@ body{
     font-family: Arial, sans-serif;
 }
 
+.logout{
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: solid black;
+}
+
 #booking_container{
     background-color: #758086;
     border: solid 1px black;

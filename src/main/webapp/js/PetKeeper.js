@@ -76,8 +76,13 @@ window.onload = function() {
         document.getElementById('users_message').style.display = 'block';
         document.getElementById('msg_cont').style.display = 'none';
     });
+    document.getElementById('logoutButton').addEventListener('click', logout);
 };
 
+function logout() {
+    document.cookie = 'username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = 'login.html';
+}
 
 function ChangeUserInfo(){
 

@@ -25,7 +25,7 @@
 
                 <div id="ajaxContent"></div>
 
-                <button id="loginButton" type="button">
+                <button id="loginButton" type="submit">
                     Log in
                 </button>
             </form>
@@ -33,5 +33,19 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="js/PetKeeperlogin.js"></script>
+        <script>
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+
+            window.onload = function() {
+                const username = getCookie('username');
+                if (username) {
+                    window.location.href = 'PetKeeper.html?username=' + encodeURIComponent(username);
+                }
+            };
+        </script>
     </body>
 </html>

@@ -31,8 +31,8 @@ function togglePasswordVisibility() {
     }
 }
 
-document.getElementById('loginButton').addEventListener('click', function () {
-
+document.getElementById('loginButton').addEventListener('click', function (event) {
+    event.preventDefault();
     getKeeper();
 
 });
@@ -43,6 +43,7 @@ function getKeeper() {
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var username = document.getElementById('username').value;
+            document.cookie = `username=${username}; path=/;`;
             window.location.href = 'PetKeeper.html?username=' + encodeURIComponent(username);
         } else if (xhr.status !== 200) {
             $("#ajaxContent").html("User not exists or incorrect password");
