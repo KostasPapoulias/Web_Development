@@ -91,6 +91,7 @@ function ChangeUserInfo(){
             if (xhr.status === 200) {
                 const responseData = JSON.parse(xhr.responseText);
                 ajaxContent.html("Successful Info Change. <br> Your Data");
+                location.reload();
             } else {
                 ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
                 try {

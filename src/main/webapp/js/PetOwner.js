@@ -362,6 +362,7 @@ function makeBooking(petKeeper, pet) {
             contentType: 'application/json',
             success: function(response) {
                 console.log('Booking successful:', response);
+                location.reload();
             },
             error: function(error) {
                 console.error('Error making booking:', error);
@@ -667,6 +668,7 @@ function ChangeUserInfo() {
                 if (xhr.getResponseHeader('Content-Type') === 'application/json') {
                     const responseData = JSON.parse(xhr.responseText);
                 }
+                location.reload();
             } else {
                 console.log('Request failed. Returned status of ' + xhr.status);
             }
@@ -701,6 +703,7 @@ function PostPet() {
                     const responseData = JSON.parse(xhr.responseText);
                     ajaxContent.html("Successful Pet Registration. <br> Your Data");
                     ajaxContent.append(createTableFromJSON(responseData));
+                    location.reload();
                 } else {
                     ajaxContent.html('Request failed. Returned status of ' + xhr.status + "<br>");
                     try {
