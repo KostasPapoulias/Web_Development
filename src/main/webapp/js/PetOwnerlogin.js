@@ -31,8 +31,8 @@ function togglePasswordVisibility() {
     }
 }
 
-document.getElementById('loginButton').addEventListener('click', function () {
-
+document.getElementById('loginButton').addEventListener('click', function (event) {
+    event.preventDefault();
     getOwner();
 
 });
@@ -44,14 +44,13 @@ function getOwner() {
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var username = document.getElementById('username').value;
-            console.log("Redirecting to PetOwner.html with username: " + username);
+            document.cookie = `username=${username}; path=/;`;
             window.location.href = 'PetOwner.html?username=' + encodeURIComponent(username);
         } else if (xhr.status !== 200) {
             $("#ajaxContent").html("User not exists or incorrect password");
         }
     };
     var data = $('#PetOwnerloginform').serialize();
-
     xhr.open('GET', 'GetOwner?' + data);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send();

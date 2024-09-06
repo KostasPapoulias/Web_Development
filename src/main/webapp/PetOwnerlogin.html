@@ -32,13 +32,18 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="js/PetOwnerlogin.js"></script>
         <script>
-            document.getElementById('PetOwnerloginform').addEventListener('submit', function(event) {
-                event.preventDefault();
-                console.log("here")
-                const username = document.getElementById('username').value;
-                document.cookie = `username=${username}; path=/;`;
-                window.location.href = 'petOwner.html';
-            });
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+            }
+
+            window.onload = function() {
+                const username = getCookie('username');
+                if (username) {
+                    window.location.href = 'PetOwner.html?username=' + encodeURIComponent(username);
+                }
+            };
         </script>
     </body>
 </html>
